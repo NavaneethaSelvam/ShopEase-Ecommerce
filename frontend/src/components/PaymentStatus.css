@@ -1,0 +1,174 @@
+.payment-status-page {
+min-height: 80vh;
+display: flex;
+align-items: center;
+justify-content: center;
+padding: 40px 20px;
+background: linear-gradient(135deg, #f5f7ff, #eef2ff);
+}
+
+.payment-status-card {
+width: 100%;
+max-width: 650px;
+padding: 45px;
+border: none;
+border-radius: 22px;
+text-align: center;
+box-shadow: 0 15px 45px rgba(0, 0, 0, 0.12);
+}
+
+.success-circle {
+width: 80px;
+height: 80px;
+margin: 0 auto 20px;
+border-radius: 50%;
+background: #22c55e;
+color: white;
+font-size: 42px;
+font-weight: bold;
+display: flex;
+align-items: center;
+justify-content: center;
+box-shadow: 0 8px 20px rgba(34, 197, 94, 0.3);
+}
+
+.success-label {
+display: inline-block;
+padding: 7px 16px;
+border-radius: 20px;
+background: #dcfce7;
+color: #15803d;
+font-size: 12px;
+font-weight: 700;
+letter-spacing: 1px;
+}
+
+.payment-status-card h1 {
+margin-top: 18px;
+font-size: 30px;
+font-weight: 700;
+color: #1f2937;
+}
+
+.success-description {
+color: #6b7280;
+margin: 15px auto 30px;
+max-width: 500px;
+line-height: 1.7;
+}
+
+.order-success-box {
+text-align: left;
+background: #f8fafc;
+border: 1px solid #e5e7eb;
+border-radius: 15px;
+padding: 20px;
+margin-bottom: 20px;
+}
+
+.order-success-row {
+display: flex;
+justify-content: space-between;
+align-items: center;
+gap: 20px;
+padding: 8px 0;
+}
+
+.order-success-row span {
+color: #6b7280;
+}
+
+.order-success-row strong {
+color: #1f2937;
+text-align: right;
+}
+
+.success-divider {
+height: 1px;
+background: #e5e7eb;
+margin: 8px 0;
+}
+
+.paid-price {
+color: #16a34a !important;
+font-size: 19px;
+}
+
+.paid-status {
+color: #16a34a !important;
+}
+
+.success-message {
+display: flex;
+align-items: center;
+gap: 12px;
+text-align: left;
+padding: 14px 18px;
+background: #eff6ff;
+border-radius: 12px;
+margin-bottom: 25px;
+}
+
+.success-message span {
+font-size: 25px;
+}
+
+.success-message p {
+margin: 0;
+color: #475569;
+font-size: 14px;
+}
+
+.success-actions {
+display: flex;
+gap: 12px;
+justify-content: center;
+}
+
+.orders-button,
+.continue-button {
+padding: 10px 20px;
+border-radius: 8px;
+}
+
+.error-icon {
+background: #ef4444;
+color: white;
+}
+
+@media (max-width: 576px) {
+
+
+.payment-status-card {
+    padding: 30px 20px;
+}
+
+.payment-status-card h1 {
+    font-size: 24px;
+}
+
+.order-success-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+}
+
+.order-success-row strong {
+    text-align: left;
+}
+
+.success-actions {
+    flex-direction: column;
+}
+
+.success-actions a {
+    width: 100%;
+}
+
+.orders-button,
+.continue-button {
+    width: 100%;
+}
+
+
+}

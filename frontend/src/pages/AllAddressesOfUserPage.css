@@ -1,0 +1,851 @@
+
+/* =========================================================
+   ALL ADDRESSES PAGE
+========================================================= */
+
+.addresses-page {
+    min-height: 100vh;
+    background:
+        radial-gradient(circle at top left, rgba(124, 58, 237, 0.10), transparent 32%),
+        radial-gradient(circle at bottom right, rgba(14, 165, 233, 0.08), transparent 30%),
+        #f7f8fc;
+    padding: 45px 20px 70px;
+    color: #172033;
+}
+
+
+/* =========================================================
+   MAIN CONTAINER
+========================================================= */
+
+.addresses-container {
+    width: 100%;
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.addresses-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 25px;
+
+    background: rgba(255, 255, 255, 0.92);
+    border: 1px solid #e8eaf2;
+    border-radius: 24px;
+
+    padding: 30px 34px;
+    margin-bottom: 32px;
+
+    box-shadow: 0 12px 35px rgba(30, 41, 59, 0.08);
+}
+
+
+.addresses-label {
+    display: inline-block;
+
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 2px;
+
+    color: #7c3aed;
+
+    background: #f1eaff;
+
+    padding: 7px 12px;
+    border-radius: 30px;
+
+    margin-bottom: 9px;
+}
+
+
+.addresses-header h1 {
+    margin: 0;
+
+    font-size: 34px;
+    font-weight: 800;
+
+    color: #111827;
+}
+
+
+.addresses-header p {
+    margin: 7px 0 0;
+
+    color: #6b7280;
+    font-size: 15px;
+}
+
+
+/* =========================================================
+   BACK BUTTON
+========================================================= */
+
+.back-checkout-btn {
+    border: none;
+
+    background: #17142b;
+    color: white;
+
+    padding: 12px 20px;
+
+    border-radius: 13px;
+
+    font-size: 14px;
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition: all 0.25s ease;
+
+    white-space: nowrap;
+}
+
+
+.back-checkout-btn:hover {
+    background: #7c3aed;
+
+    transform: translateX(-3px);
+
+    box-shadow: 0 8px 20px rgba(124, 58, 237, 0.25);
+}
+
+
+/* =========================================================
+   SAVED ADDRESS SECTION
+========================================================= */
+
+.saved-address-section {
+    margin-bottom: 35px;
+}
+
+
+.section-title {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+
+    margin-bottom: 18px;
+    padding: 0 4px;
+}
+
+
+.section-title > div:first-child > span {
+    display: inline-block;
+
+    font-size: 10px;
+    font-weight: 800;
+
+    letter-spacing: 2px;
+
+    color: #64748b;
+
+    margin-bottom: 5px;
+}
+
+
+.section-title h2 {
+    margin: 0;
+
+    font-size: 24px;
+    font-weight: 800;
+
+    color: #111827;
+}
+
+
+.address-count {
+    background: #ffffff;
+
+    border: 1px solid #e6e8f0;
+
+    color: #7c3aed;
+
+    font-size: 13px;
+    font-weight: 800;
+
+    padding: 9px 15px;
+
+    border-radius: 30px;
+
+    box-shadow: 0 5px 15px rgba(15, 23, 42, 0.05);
+}
+
+
+/* =========================================================
+   ADDRESS CARD
+========================================================= */
+
+.address-item-card {
+    border: 1px solid #e6e8f0 !important;
+
+    border-radius: 22px !important;
+
+    background: #ffffff !important;
+
+    padding: 0 !important;
+
+    margin-bottom: 17px !important;
+
+    overflow: hidden;
+
+    box-shadow: 0 8px 25px rgba(15, 23, 42, 0.06);
+
+    transition: all 0.3s ease;
+}
+
+
+.address-item-card:hover {
+    transform: translateY(-4px);
+
+    border-color: #c4b5fd !important;
+
+    box-shadow:
+        0 18px 40px rgba(124, 58, 237, 0.12);
+}
+
+
+/* =========================================================
+   ADDRESS TOP
+========================================================= */
+
+.address-card-top {
+    display: flex;
+
+    gap: 18px;
+
+    padding: 25px 25px 20px;
+}
+
+
+.address-icon {
+    width: 52px;
+    height: 52px;
+
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 16px;
+
+    background:
+        linear-gradient(135deg, #ede9fe, #ddd6fe);
+
+    font-size: 23px;
+
+    box-shadow:
+        inset 0 0 0 1px rgba(124, 58, 237, 0.08);
+}
+
+
+/* =========================================================
+   ADDRESS CONTENT
+========================================================= */
+
+.address-main {
+    flex: 1;
+    min-width: 0;
+}
+
+
+.address-name-row {
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    margin-bottom: 8px;
+}
+
+
+.address-name-row h3 {
+    margin: 0;
+
+    font-size: 19px;
+
+    font-weight: 800;
+
+    color: #111827;
+}
+
+
+.saved-badge {
+    display: inline-flex;
+
+    align-items: center;
+
+    background: #ecfdf5;
+
+    color: #059669;
+
+    border: 1px solid #a7f3d0;
+
+    padding: 4px 9px;
+
+    border-radius: 30px;
+
+    font-size: 9px;
+
+    font-weight: 800;
+
+    letter-spacing: 0.8px;
+}
+
+
+.address-phone {
+    margin: 0 0 9px;
+
+    font-size: 14px;
+
+    font-weight: 700;
+
+    color: #475569;
+}
+
+
+.address-text {
+    margin: 0;
+
+    color: #64748b;
+
+    font-size: 14px;
+
+    line-height: 1.7;
+
+    max-width: 850px;
+}
+
+
+/* =========================================================
+   ACTION AREA
+========================================================= */
+
+.address-actions {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: flex-end;
+
+    gap: 10px;
+
+    padding: 15px 25px;
+
+    background: #fafaff;
+
+    border-top: 1px solid #eef0f5;
+}
+
+
+.edit-address-action,
+.delete-address-action {
+    border: none;
+
+    border-radius: 11px;
+
+    padding: 10px 16px;
+
+    font-size: 13px;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition: all 0.2s ease;
+}
+
+
+.edit-address-action {
+    background: #ede9fe;
+
+    color: #6d28d9;
+}
+
+
+.edit-address-action:hover {
+    background: #7c3aed;
+
+    color: white;
+
+    transform: translateY(-2px);
+
+    box-shadow: 0 7px 18px rgba(124, 58, 237, 0.25);
+}
+
+
+.delete-address-action {
+    background: #fff1f2;
+
+    color: #e11d48;
+}
+
+
+.delete-address-action:hover {
+    background: #e11d48;
+
+    color: white;
+
+    transform: translateY(-2px);
+
+    box-shadow: 0 7px 18px rgba(225, 29, 72, 0.20);
+}
+
+
+/* =========================================================
+   NO ADDRESS
+========================================================= */
+
+.no-address-card {
+    background: white;
+
+    border: 2px dashed #ddd6fe;
+
+    border-radius: 22px;
+
+    text-align: center;
+
+    padding: 45px 25px;
+
+    margin-bottom: 20px;
+}
+
+
+.no-address-icon {
+    width: 65px;
+    height: 65px;
+
+    margin: 0 auto 15px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: #f3f0ff;
+
+    font-size: 27px;
+}
+
+
+.no-address-card h3 {
+    margin: 0 0 7px;
+
+    font-size: 20px;
+
+    font-weight: 800;
+}
+
+
+.no-address-card p {
+    margin: 0;
+
+    color: #64748b;
+
+    font-size: 14px;
+}
+
+
+/* =========================================================
+   NEW ADDRESS SECTION
+========================================================= */
+
+.new-address-section {
+    position: relative;
+
+    background: #17142b;
+
+    border-radius: 26px;
+
+    padding: 30px;
+
+    overflow: hidden;
+
+    box-shadow:
+        0 20px 45px rgba(23, 20, 43, 0.16);
+
+    margin-top: 35px;
+}
+
+
+/* Decorative glow */
+
+.new-address-section::before {
+    content: "";
+
+    position: absolute;
+
+    width: 220px;
+    height: 220px;
+
+    border-radius: 50%;
+
+    background: rgba(124, 58, 237, 0.28);
+
+    top: -110px;
+    right: -70px;
+
+    filter: blur(5px);
+}
+
+
+.new-address-section::after {
+    content: "";
+
+    position: absolute;
+
+    width: 170px;
+    height: 170px;
+
+    border-radius: 50%;
+
+    background: rgba(14, 165, 233, 0.14);
+
+    bottom: -100px;
+    left: -60px;
+
+    filter: blur(8px);
+}
+
+
+/* =========================================================
+   NEW ADDRESS HEADER
+========================================================= */
+
+.new-address-header {
+    position: relative;
+    z-index: 2;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 17px;
+
+    margin-bottom: 25px;
+}
+
+
+.new-address-icon {
+    width: 55px;
+    height: 55px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 17px;
+
+    background: linear-gradient(
+        135deg,
+        #8b5cf6,
+        #6d28d9
+    );
+
+    color: white;
+
+    font-size: 29px;
+
+    font-weight: 300;
+
+    box-shadow:
+        0 10px 25px rgba(124, 58, 237, 0.35);
+}
+
+
+.new-address-header span {
+    display: block;
+
+    color: #a78bfa;
+
+    font-size: 10px;
+
+    font-weight: 800;
+
+    letter-spacing: 2px;
+
+    margin-bottom: 5px;
+}
+
+
+.new-address-header h2 {
+    margin: 0;
+
+    color: white;
+
+    font-size: 24px;
+
+    font-weight: 800;
+}
+
+
+.new-address-header p {
+    margin: 5px 0 0;
+
+    color: #aaa7bd;
+
+    font-size: 13px;
+}
+
+
+/* =========================================================
+   CREATE ADDRESS WRAPPER
+========================================================= */
+
+.create-address-wrapper {
+    position: relative;
+
+    z-index: 2;
+}
+
+
+/*
+   CreateAddressComponent already has its own card.
+   Remove double-card appearance here.
+*/
+
+.new-address-section .create-address-wrapper {
+    background: transparent;
+}
+
+
+/* =========================================================
+   LOADING
+========================================================= */
+
+.addresses-loading {
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 12px;
+
+    background: white;
+
+    border-radius: 18px;
+
+    padding: 30px;
+
+    color: #64748b;
+
+    font-size: 14px;
+
+    box-shadow: 0 8px 25px rgba(15, 23, 42, 0.06);
+}
+
+
+.addresses-loading .spinner-border {
+    width: 24px;
+    height: 24px;
+
+    color: #7c3aed;
+}
+
+
+/* =========================================================
+   DELETE MODAL
+========================================================= */
+
+.delete-address-preview {
+    margin-top: 15px;
+
+    background: #f8f7ff;
+
+    border: 1px solid #e5e0ff;
+
+    border-radius: 13px;
+
+    padding: 14px;
+
+    color: #475569;
+
+    line-height: 1.6;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 768px) {
+
+    .addresses-page {
+        padding: 25px 14px 50px;
+    }
+
+
+    .addresses-header {
+        padding: 23px;
+
+        border-radius: 20px;
+
+        flex-direction: column;
+
+        align-items: flex-start;
+    }
+
+
+    .addresses-header h1 {
+        font-size: 28px;
+    }
+
+
+    .back-checkout-btn {
+        width: 100%;
+
+        text-align: center;
+    }
+
+
+    .section-title {
+        align-items: flex-start;
+
+        gap: 15px;
+    }
+
+
+    .address-card-top {
+        padding: 20px;
+
+        gap: 13px;
+    }
+
+
+    .address-icon {
+        width: 45px;
+        height: 45px;
+
+        border-radius: 13px;
+
+        font-size: 19px;
+    }
+
+
+    .address-name-row {
+        flex-wrap: wrap;
+    }
+
+
+    .address-name-row h3 {
+        font-size: 17px;
+    }
+
+
+    .address-text {
+        font-size: 13px;
+    }
+
+
+    .address-actions {
+        padding: 13px 20px;
+
+        justify-content: stretch;
+    }
+
+
+    .edit-address-action,
+    .delete-address-action {
+        flex: 1;
+
+        padding: 10px 8px;
+
+        font-size: 12px;
+    }
+
+
+    .new-address-section {
+        padding: 22px 17px;
+
+        border-radius: 21px;
+    }
+
+
+    .new-address-header h2 {
+        font-size: 21px;
+    }
+
+}
+
+
+@media (max-width: 480px) {
+
+    .addresses-header {
+        padding: 20px;
+    }
+
+
+    .addresses-header h1 {
+        font-size: 25px;
+    }
+
+
+    .section-title h2 {
+        font-size: 21px;
+    }
+
+
+    .address-count {
+        font-size: 11px;
+
+        padding: 8px 11px;
+    }
+
+
+    .address-card-top {
+        align-items: flex-start;
+    }
+
+
+    .address-icon {
+        display: none;
+    }
+
+
+    .new-address-header {
+        align-items: flex-start;
+    }
+
+
+    .new-address-icon {
+        width: 45px;
+        height: 45px;
+
+        font-size: 24px;
+
+        flex-shrink: 0;
+    }
+
+}
+
+/* Remove unwanted icon around Your Addresses heading */
+.section-title::before,
+.section-title::after {
+    display: none !important;
+    content: none !important;
+}
+
+/* Your Addresses heading alignment */
+.section-title {
+    position: relative;
+    padding-left: 0 !important;
+}
+
+.section-title > div:first-child {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+/* Location icon should appear ONLY inside address cards */
+.address-icon {
+    display: flex;
+}

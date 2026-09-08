@@ -1,0 +1,270 @@
+.card-details-page {
+    min-height: 100vh;
+    background: #f5f7fb;
+    padding: 40px 20px;
+}
+
+.card-details-container {
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+/* Header */
+
+.card-page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.card-page-header h2 {
+    margin: 0;
+    font-size: 30px;
+    font-weight: 700;
+    color: #222;
+}
+
+.card-page-header p {
+    margin: 6px 0 0;
+    color: #777;
+    font-size: 15px;
+}
+
+.add-card-btn {
+    background: #0d6efd;
+    color: white;
+    padding: 12px 20px;
+    border-radius: 7px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: 0.2s ease;
+}
+
+.add-card-btn:hover {
+    background: #084db8;
+    color: white;
+    text-decoration: none;
+}
+
+/* Loading */
+
+.card-loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    padding: 40px;
+    color: #555;
+}
+
+/* Cards */
+
+.saved-cards-list {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 25px;
+}
+
+.saved-card {
+    background: white;
+    border-radius: 14px;
+    padding: 25px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+    border: 1px solid #e5e5e5;
+    transition: 0.2s ease;
+}
+
+.saved-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+}
+
+/* Card Header */
+
+.saved-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.saved-card-header h4 {
+    margin: 0;
+    font-size: 19px;
+    font-weight: 700;
+    color: #222;
+}
+
+.saved-card-header span {
+    display: block;
+    margin-top: 5px;
+    color: #888;
+    font-size: 13px;
+}
+
+.card-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: #eaf2ff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 23px;
+}
+
+/* Card Number */
+
+.card-number {
+    background: #111827;
+    color: white;
+    padding: 18px;
+    border-radius: 9px;
+    letter-spacing: 3px;
+    font-size: 17px;
+    margin-bottom: 22px;
+    text-align: center;
+}
+
+/* Card Info */
+
+.card-info-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+}
+
+.card-info-item {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.card-info-item span {
+    color: #888;
+    font-size: 12px;
+    text-transform: uppercase;
+}
+
+.card-info-item strong {
+    color: #333;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+/* Actions */
+
+.card-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 25px;
+    padding-top: 20px;
+    border-top: 1px solid #eee;
+}
+
+.update-card-btn {
+    flex: 1;
+    text-align: center;
+    background: #0d6efd;
+    color: white;
+    padding: 11px;
+    border-radius: 7px;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.update-card-btn:hover {
+    background: #084db8;
+    color: white;
+    text-decoration: none;
+}
+
+.delete-card-btn {
+    flex: 1;
+    border: 1px solid #dc3545;
+    background: white;
+    color: #dc3545;
+    padding: 11px;
+    border-radius: 7px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.delete-card-btn:hover {
+    background: #dc3545;
+    color: white;
+}
+
+/* No Card */
+
+.no-card-message {
+    background: white;
+    padding: 40px;
+    border-radius: 12px;
+    text-align: center;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.06);
+}
+
+.add-first-card-btn {
+    display: inline-block;
+    margin-top: 15px;
+    background: #0d6efd;
+    color: white;
+    padding: 11px 22px;
+    border-radius: 7px;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.add-first-card-btn:hover {
+    background: #084db8;
+    color: white;
+    text-decoration: none;
+}
+
+/* Responsive */
+
+@media (max-width: 768px) {
+
+    .card-details-page {
+        padding: 25px 15px;
+    }
+
+    .card-page-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 18px;
+    }
+
+    .add-card-btn {
+        width: 100%;
+        text-align: center;
+    }
+
+    .saved-cards-list {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+@media (max-width: 480px) {
+
+    .card-page-header h2 {
+        font-size: 24px;
+    }
+
+    .saved-card {
+        padding: 18px;
+    }
+
+    .card-info-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .card-actions {
+        flex-direction: column;
+    }
+
+}

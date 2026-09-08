@@ -1,0 +1,753 @@
+/* =========================================
+   MAIN PAGE
+========================================= */
+
+.account-page {
+    min-height: 100vh;
+    padding: 50px 20px 70px;
+
+    background:
+        radial-gradient(
+            circle at 10% 20%,
+            rgba(99, 102, 241, 0.25),
+            transparent 30%
+        ),
+        radial-gradient(
+            circle at 90% 80%,
+            rgba(168, 85, 247, 0.22),
+            transparent 30%
+        ),
+        linear-gradient(
+            135deg,
+            #f8fafc 0%,
+            #eef2ff 50%,
+            #f5f3ff 100%
+        );
+
+    position: relative;
+    overflow: hidden;
+}
+
+
+/* Decorative circles */
+
+.account-page::before {
+    content: "";
+    position: absolute;
+
+    width: 350px;
+    height: 350px;
+
+    border-radius: 50%;
+
+    background: linear-gradient(
+        135deg,
+        rgba(99, 102, 241, 0.15),
+        rgba(168, 85, 247, 0.08)
+    );
+
+    top: -130px;
+    left: -100px;
+
+    filter: blur(10px);
+}
+
+
+.account-page::after {
+    content: "";
+
+    position: absolute;
+
+    width: 300px;
+    height: 300px;
+
+    border-radius: 50%;
+
+    background: linear-gradient(
+        135deg,
+        rgba(236, 72, 153, 0.12),
+        rgba(139, 92, 246, 0.12)
+    );
+
+    bottom: -120px;
+    right: -80px;
+
+    filter: blur(10px);
+}
+
+
+/* =========================================
+   CONTAINER
+========================================= */
+
+.account-container {
+    width: 100%;
+    max-width: 850px;
+
+    margin: 0 auto;
+
+    position: relative;
+    z-index: 2;
+}
+
+
+/* =========================================
+   BACK LINK
+========================================= */
+
+.account-back-link {
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    margin-bottom: 22px;
+
+    padding: 10px 18px;
+
+    border-radius: 12px;
+
+    color: #4338ca;
+
+    background: rgba(255, 255, 255, 0.75);
+
+    text-decoration: none;
+
+    font-weight: 600;
+
+    border: 1px solid rgba(99, 102, 241, 0.15);
+
+    box-shadow:
+        0 5px 18px rgba(99, 102, 241, 0.08);
+
+    transition: all 0.3s ease;
+}
+
+
+.account-back-link:hover {
+    color: white;
+
+    background: linear-gradient(
+        135deg,
+        #6366f1,
+        #8b5cf6
+    );
+
+    transform: translateX(-4px);
+
+    text-decoration: none;
+
+    box-shadow:
+        0 10px 25px rgba(99, 102, 241, 0.25);
+}
+
+
+/* =========================================
+   MAIN CARD
+========================================= */
+
+.account-card {
+    background:
+        rgba(255, 255, 255, 0.88);
+
+    backdrop-filter: blur(18px);
+
+    -webkit-backdrop-filter: blur(18px);
+
+    border:
+        1px solid rgba(255, 255, 255, 0.8);
+
+    border-radius: 28px;
+
+    padding: 40px;
+
+    box-shadow:
+        0 25px 60px rgba(15, 23, 42, 0.12);
+
+    animation:
+        accountFadeUp 0.7s ease;
+}
+
+
+@keyframes accountFadeUp {
+
+    from {
+        opacity: 0;
+        transform: translateY(25px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+}
+
+
+/* =========================================
+   HEADER
+========================================= */
+
+.account-header {
+    display: flex;
+
+    align-items: center;
+
+    gap: 20px;
+
+    padding-bottom: 28px;
+
+    margin-bottom: 30px;
+
+    border-bottom:
+        1px solid #e5e7eb;
+}
+
+
+.account-header-icon {
+    width: 76px;
+    height: 76px;
+
+    min-width: 76px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    font-size: 32px;
+
+    border-radius: 22px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #6366f1,
+            #8b5cf6
+        );
+
+    box-shadow:
+        0 12px 28px
+        rgba(99, 102, 241, 0.35);
+
+    animation:
+        accountFloat 3s ease-in-out infinite;
+}
+
+
+@keyframes accountFloat {
+
+    0% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-6px);
+    }
+
+    100% {
+        transform: translateY(0);
+    }
+
+}
+
+
+.account-small-title {
+    display: inline-block;
+
+    margin-bottom: 7px;
+
+    color: #6366f1;
+
+    font-size: 12px;
+
+    font-weight: 800;
+
+    letter-spacing: 1.5px;
+}
+
+
+.account-header h1 {
+    margin: 0;
+
+    color: #111827;
+
+    font-size: 32px;
+
+    font-weight: 800;
+}
+
+
+.account-header p {
+    margin: 8px 0 0;
+
+    color: #6b7280;
+
+    font-size: 15px;
+
+    line-height: 1.6;
+}
+
+
+/* =========================================
+   FORM
+========================================= */
+
+.account-form {
+    width: 100%;
+}
+
+
+.account-form-group {
+    margin-bottom: 22px;
+}
+
+
+.account-form-group label {
+    display: block;
+
+    margin-bottom: 9px;
+
+    color: #374151;
+
+    font-size: 14px;
+
+    font-weight: 700;
+}
+
+
+/* =========================================
+   INPUT WRAPPER
+========================================= */
+
+.account-input-wrapper {
+    position: relative;
+
+    display: flex;
+
+    align-items: center;
+}
+
+
+.account-input-wrapper > span:first-child {
+    position: absolute;
+
+    left: 16px;
+
+    z-index: 2;
+
+    font-size: 17px;
+
+    pointer-events: none;
+}
+
+
+/* Bootstrap Input */
+
+.account-input-wrapper .form-control {
+    width: 100%;
+
+    height: 54px;
+
+    padding-left: 48px;
+
+    padding-right: 48px;
+
+    border-radius: 14px;
+
+    border:
+        1.5px solid #e5e7eb;
+
+    background:
+        rgba(255, 255, 255, 0.95);
+
+    color: #111827;
+
+    font-size: 15px;
+
+    box-shadow: none;
+
+    transition: all 0.25s ease;
+}
+
+
+.account-input-wrapper .form-control::placeholder {
+    color: #9ca3af;
+}
+
+
+/* Focus Effect */
+
+.account-input-wrapper .form-control:focus {
+    border-color: #6366f1;
+
+    box-shadow:
+        0 0 0 4px
+        rgba(99, 102, 241, 0.12);
+
+    transform: translateY(-1px);
+}
+
+
+/* =========================================
+   PASSWORD SECTION
+========================================= */
+
+.account-password-section {
+    margin-top: 34px;
+
+    padding: 25px;
+
+    border-radius: 20px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #f8faff,
+            #f5f3ff
+        );
+
+    border:
+        1px solid #e9e7ff;
+}
+
+
+.account-section-title {
+    margin-bottom: 25px;
+}
+
+
+.account-section-title h3 {
+    margin: 0 0 6px;
+
+    color: #312e81;
+
+    font-size: 19px;
+
+    font-weight: 750;
+}
+
+
+.account-section-title p {
+    margin: 0;
+
+    color: #6b7280;
+
+    font-size: 13px;
+
+    line-height: 1.6;
+}
+
+
+/* =========================================
+   PASSWORD SHOW / HIDE BUTTON
+========================================= */
+
+.account-password-toggle {
+    position: absolute;
+
+    right: 12px;
+
+    border: none;
+
+    background: transparent;
+
+    cursor: pointer;
+
+    font-size: 18px;
+
+    padding: 5px;
+
+    z-index: 3;
+
+    transition: transform 0.2s ease;
+}
+
+
+.account-password-toggle:hover {
+    transform: scale(1.15);
+}
+
+
+/* =========================================
+   ERROR
+========================================= */
+
+.account-error {
+    margin-bottom: 22px;
+
+    padding: 14px 18px;
+
+    border-radius: 12px;
+
+    color: #b91c1c;
+
+    background: #fef2f2;
+
+    border:
+        1px solid #fecaca;
+
+    font-weight: 600;
+}
+
+
+/* =========================================
+   BUTTON AREA
+========================================= */
+
+.account-button-row {
+    display: flex;
+
+    align-items: center;
+
+    gap: 15px;
+
+    margin-top: 32px;
+}
+
+
+/* SAVE BUTTON */
+
+.account-save-btn {
+    flex: 1;
+
+    min-height: 54px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 10px;
+
+    border: none;
+
+    border-radius: 14px;
+
+    color: white;
+
+    background:
+        linear-gradient(
+            135deg,
+            #6366f1,
+            #7c3aed
+        );
+
+    font-size: 15px;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 10px 25px
+        rgba(99, 102, 241, 0.3);
+
+    transition: all 0.3s ease;
+}
+
+
+.account-save-btn:hover:not(:disabled) {
+    transform: translateY(-3px);
+
+    box-shadow:
+        0 16px 32px
+        rgba(99, 102, 241, 0.4);
+}
+
+
+.account-save-btn:active:not(:disabled) {
+    transform: translateY(-1px);
+}
+
+
+.account-save-btn:disabled {
+    opacity: 0.7;
+
+    cursor: not-allowed;
+}
+
+
+/* =========================================
+   CANCEL BUTTON
+========================================= */
+
+.account-cancel-btn {
+    min-height: 54px;
+
+    min-width: 130px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding: 0 25px;
+
+    border-radius: 14px;
+
+    color: #4b5563;
+
+    background: white;
+
+    border:
+        1.5px solid #e5e7eb;
+
+    text-decoration: none;
+
+    font-size: 15px;
+
+    font-weight: 700;
+
+    transition: all 0.25s ease;
+}
+
+
+.account-cancel-btn:hover {
+    color: #4338ca;
+
+    border-color: #a5b4fc;
+
+    background: #eef2ff;
+
+    text-decoration: none;
+}
+
+
+/* =========================================
+   LOADING
+========================================= */
+
+.account-loading {
+    width: 100%;
+
+    min-height: 60vh;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 15px;
+
+    color: #4f46e5;
+
+    font-weight: 600;
+}
+
+
+/* =========================================
+   RESPONSIVE - TABLET
+========================================= */
+
+@media (max-width: 768px) {
+
+    .account-page {
+        padding: 30px 15px 50px;
+    }
+
+
+    .account-card {
+        padding: 28px 22px;
+
+        border-radius: 22px;
+    }
+
+
+    .account-header {
+        align-items: flex-start;
+    }
+
+
+    .account-header h1 {
+        font-size: 26px;
+    }
+
+
+    .account-header-icon {
+        width: 62px;
+        height: 62px;
+
+        min-width: 62px;
+
+        font-size: 26px;
+
+        border-radius: 18px;
+    }
+
+}
+
+
+/* =========================================
+   RESPONSIVE - MOBILE
+========================================= */
+
+@media (max-width: 576px) {
+
+    .account-page {
+        padding: 20px 12px 40px;
+    }
+
+
+    .account-card {
+        padding: 22px 16px;
+
+        border-radius: 20px;
+    }
+
+
+    .account-header {
+        flex-direction: column;
+
+        gap: 14px;
+
+        padding-bottom: 20px;
+
+        margin-bottom: 22px;
+    }
+
+
+    .account-header h1 {
+        font-size: 24px;
+    }
+
+
+    .account-header p {
+        font-size: 13px;
+    }
+
+
+    .account-password-section {
+        padding: 18px 14px;
+
+        border-radius: 16px;
+    }
+
+
+    .account-button-row {
+        flex-direction: column;
+    }
+
+
+    .account-save-btn,
+    .account-cancel-btn {
+        width: 100%;
+    }
+
+
+    .account-cancel-btn {
+        min-height: 50px;
+    }
+
+
+    .account-back-link {
+        font-size: 14px;
+    }
+
+}
