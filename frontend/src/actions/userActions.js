@@ -1,4 +1,3 @@
-
 import {
     USER_LOGIN_REQUEST,
     USER_LOGIN_SUCCESS,
@@ -60,9 +59,16 @@ import {
 import axios from 'axios'
 
 
-// =========================================
+// ======================================================
+// RENDER BACKEND URL
+// ======================================================
+
+const API_URL = "https://shopease-backend-5flz.onrender.com"
+
+
+// ======================================================
 // LOGIN
-// =========================================
+// ======================================================
 
 export const login = (username, password) => async (dispatch) => {
 
@@ -74,12 +80,12 @@ export const login = (username, password) => async (dispatch) => {
 
         const config = {
             headers: {
-                'Content-type': 'application/json'
+                'Content-Type': 'application/json'
             }
         }
 
         const { data } = await axios.post(
-            '/account/login/',
+            `${API_URL}/account/login/`,
             {
                 username: username,
                 password: password
@@ -111,9 +117,9 @@ export const login = (username, password) => async (dispatch) => {
 }
 
 
-// =========================================
+// ======================================================
 // LOGOUT
-// =========================================
+// ======================================================
 
 export const logout = () => (dispatch) => {
 
@@ -129,9 +135,9 @@ export const logout = () => (dispatch) => {
 }
 
 
-// =========================================
+// ======================================================
 // REGISTER
-// =========================================
+// ======================================================
 
 export const register =
     (username, email, password) => async (dispatch) => {
@@ -144,12 +150,12 @@ export const register =
 
             const config = {
                 headers: {
-                    'Content-type': 'application/json'
+                    'Content-Type': 'application/json'
                 }
             }
 
             const { data } = await axios.post(
-                '/account/register/',
+                `${API_URL}/account/register/`,
                 {
                     username: username,
                     email: email,
@@ -187,9 +193,9 @@ export const register =
     }
 
 
-// =========================================
+// ======================================================
 // CHECK TOKEN VALIDATION
-// =========================================
+// ======================================================
 
 export const checkTokenValidation =
     () => async (dispatch, getState) => {
@@ -212,7 +218,7 @@ export const checkTokenValidation =
             }
 
             const { data } = await axios.get(
-                "/payments/check-token/",
+                `${API_URL}/payments/check-token/`,
                 config
             )
 
@@ -235,9 +241,9 @@ export const checkTokenValidation =
     }
 
 
-// =========================================
+// ======================================================
 // USER DETAILS
-// =========================================
+// ======================================================
 
 export const userDetails =
     (id) => async (dispatch, getState) => {
@@ -260,7 +266,7 @@ export const userDetails =
             }
 
             const { data } = await axios.get(
-                `/account/user/${id}`,
+                `${API_URL}/account/user/${id}`,
                 config
             )
 
@@ -283,9 +289,9 @@ export const userDetails =
     }
 
 
-// =========================================
+// ======================================================
 // UPDATE USER DETAILS
-// =========================================
+// ======================================================
 
 export const userUpdateDetails =
     (userData) => async (dispatch, getState) => {
@@ -308,7 +314,7 @@ export const userUpdateDetails =
             }
 
             const { data } = await axios.put(
-                `/account/user_update/${userInfo.id}/`,
+                `${API_URL}/account/user_update/${userInfo.id}/`,
                 {
                     username: userData.username,
                     email: userData.email,
@@ -336,9 +342,9 @@ export const userUpdateDetails =
     }
 
 
-// =========================================
+// ======================================================
 // DELETE USER ACCOUNT
-// =========================================
+// ======================================================
 
 export const userAccountDelete =
     (userData) => async (dispatch, getState) => {
@@ -361,7 +367,7 @@ export const userAccountDelete =
             }
 
             const { data } = await axios.post(
-                `/account/user_delete/${userData.id}/`,
+                `${API_URL}/account/user_delete/${userData.id}/`,
                 {
                     password: userData.password
                 },
@@ -387,9 +393,9 @@ export const userAccountDelete =
     }
 
 
-// =========================================
+// ======================================================
 // GET ALL USER ADDRESSES
-// =========================================
+// ======================================================
 
 export const getAllAddress =
     () => async (dispatch, getState) => {
@@ -412,7 +418,7 @@ export const getAllAddress =
             }
 
             const { data } = await axios.get(
-                "/account/all-address-details/",
+                `${API_URL}/account/all-address-details/`,
                 config
             )
 
@@ -435,9 +441,9 @@ export const getAllAddress =
     }
 
 
-// =========================================
+// ======================================================
 // GET SINGLE ADDRESS
-// =========================================
+// ======================================================
 
 export const getSingleAddress =
     (id) => async (dispatch, getState) => {
@@ -460,7 +466,7 @@ export const getSingleAddress =
             }
 
             const { data } = await axios.get(
-                `/account/address-details/${id}/`,
+                `${API_URL}/account/address-details/${id}/`,
                 config
             )
 
@@ -483,9 +489,9 @@ export const getSingleAddress =
     }
 
 
-// =========================================
+// ======================================================
 // CREATE USER ADDRESS
-// =========================================
+// ======================================================
 
 export const createUserAddress =
     (addressData) => async (dispatch, getState) => {
@@ -508,7 +514,7 @@ export const createUserAddress =
             }
 
             const { data } = await axios.post(
-                "/account/create-address/",
+                `${API_URL}/account/create-address/`,
                 addressData,
                 config
             )
@@ -532,9 +538,9 @@ export const createUserAddress =
     }
 
 
-// =========================================
+// ======================================================
 // UPDATE USER ADDRESS
-// =========================================
+// ======================================================
 
 export const updateUserAddress =
     (id, addressData) => async (dispatch, getState) => {
@@ -557,7 +563,7 @@ export const updateUserAddress =
             }
 
             const { data } = await axios.put(
-                `/account/update-address/${id}/`,
+                `${API_URL}/account/update-address/${id}/`,
                 addressData,
                 config
             )
@@ -581,9 +587,9 @@ export const updateUserAddress =
     }
 
 
-// =========================================
+// ======================================================
 // DELETE USER ADDRESS
-// =========================================
+// ======================================================
 
 export const deleteUserAddress =
     (id) => async (dispatch, getState) => {
@@ -606,7 +612,7 @@ export const deleteUserAddress =
             }
 
             const { data } = await axios.delete(
-                `/account/delete-address/${id}/`,
+                `${API_URL}/account/delete-address/${id}/`,
                 config
             )
 
@@ -629,9 +635,9 @@ export const deleteUserAddress =
     }
 
 
-// =========================================
+// ======================================================
 // GET ALL ORDERS
-// =========================================
+// ======================================================
 
 export const getAllOrders =
     () => async (dispatch, getState) => {
@@ -654,7 +660,7 @@ export const getAllOrders =
             }
 
             const { data } = await axios.get(
-                "/account/all-orders-list/",
+                `${API_URL}/account/all-orders-list/`,
                 config
             )
 
@@ -677,9 +683,9 @@ export const getAllOrders =
     }
 
 
-// =========================================
+// ======================================================
 // CHANGE DELIVERY STATUS
-// =========================================
+// ======================================================
 
 export const changeDeliveryStatus =
     (id, productData) => async (dispatch, getState) => {
@@ -702,7 +708,7 @@ export const changeDeliveryStatus =
             }
 
             const { data } = await axios.put(
-                `/account/change-delivery-status/${id}/`,
+                `${API_URL}/account/change-delivery-status/${id}/`,
                 productData,
                 config
             )
@@ -724,4 +730,3 @@ export const changeDeliveryStatus =
             })
         }
     }
-
