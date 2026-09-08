@@ -28,53 +28,75 @@ import {
 import axios from 'axios'
 
 
-// products list
+// ================================
+// BACKEND API URL
+// ================================
+const API_URL = "https://shopease-backend-5flz.onrender.com"
+
+
+// ================================
+// PRODUCTS LIST
+// ================================
 export const getProductsList = () => async (dispatch) => {
     try {
         dispatch({
             type: PRODUCTS_LIST_REQUEST
         })
 
-        // call api
-        const { data } = await axios.get("/api/products/")
+        const { data } = await axios.get(
+            `${API_URL}/api/products/`
+        )
 
         dispatch({
             type: PRODUCTS_LIST_SUCCESS,
             payload: data
         })
+
     } catch (error) {
         dispatch({
             type: PRODUCTS_LIST_FAIL,
-            payload: error.message
+            payload:
+                error.response && error.response.data.detail
+                    ? error.response.data.detail
+                    : error.message
         })
     }
 }
 
 
-// product details
+// ================================
+// PRODUCT DETAILS
+// ================================
 export const getProductDetails = (id) => async (dispatch) => {
     try {
         dispatch({
             type: PRODUCT_DETAILS_REQUEST
         })
 
-        // call api
-        const { data } = await axios.get(`/api/product/${id}/`)
+        const { data } = await axios.get(
+            `${API_URL}/api/product/${id}/`
+        )
 
         dispatch({
             type: PRODUCT_DETAILS_SUCCESS,
             payload: data
         })
+
     } catch (error) {
         dispatch({
             type: PRODUCT_DETAILS_FAIL,
-            payload: error.message
+            payload:
+                error.response && error.response.data.detail
+                    ? error.response.data.detail
+                    : error.message
         })
     }
 }
 
 
-// create product
+// ================================
+// CREATE PRODUCT
+// ================================
 export const createProduct = (product) => async (dispatch, getState) => {
 
     try {
@@ -82,7 +104,6 @@ export const createProduct = (product) => async (dispatch, getState) => {
             type: CREATE_PRODUCT_REQUEST
         })
 
-        // login reducer
         const {
             userLoginReducer: { userInfo },
         } = getState()
@@ -94,9 +115,8 @@ export const createProduct = (product) => async (dispatch, getState) => {
             }
         }
 
-        // api call
         const { data } = await axios.post(
-            "/api/product-create/",
+            `${API_URL}/api/product-create/`,
             product,
             config
         )
@@ -105,22 +125,29 @@ export const createProduct = (product) => async (dispatch, getState) => {
             type: CREATE_PRODUCT_SUCCESS,
             payload: data
         })
+
     } catch (error) {
         dispatch({
             type: CREATE_PRODUCT_FAIL,
-            payload: error.response && error.response.data.detail ? error.response.data.detail : error.message
+            payload:
+                error.response && error.response.data.detail
+                    ? error.response.data.detail
+                    : error.message
         })
     }
 }
 
-// delete product
+
+// ================================
+// DELETE PRODUCT
+// ================================
 export const deleteProduct = (id) => async (dispatch, getState) => {
+
     try {
         dispatch({
             type: DELETE_PRODUCT_REQUEST
         })
 
-        // login reducer
         const {
             userLoginReducer: { userInfo },
         } = getState()
@@ -132,9 +159,8 @@ export const deleteProduct = (id) => async (dispatch, getState) => {
             }
         }
 
-        // api call
         const { data } = await axios.delete(
-            `/api/product-delete/${id}/`,
+            `${API_URL}/api/product-delete/${id}/`,
             config
         )
 
@@ -146,12 +172,18 @@ export const deleteProduct = (id) => async (dispatch, getState) => {
     } catch (error) {
         dispatch({
             type: DELETE_PRODUCT_FAIL,
-            payload: error.response && error.response.data.detail ? error.response.data.detail : error.message
+            payload:
+                error.response && error.response.data.detail
+                    ? error.response.data.detail
+                    : error.message
         })
     }
 }
 
-// update product
+
+// ================================
+// UPDATE PRODUCT
+// ================================
 export const updateProduct = (id, product) => async (dispatch, getState) => {
 
     try {
@@ -159,7 +191,6 @@ export const updateProduct = (id, product) => async (dispatch, getState) => {
             type: UPDATE_PRODUCT_REQUEST
         })
 
-        // login reducer
         const {
             userLoginReducer: { userInfo },
         } = getState()
@@ -171,9 +202,8 @@ export const updateProduct = (id, product) => async (dispatch, getState) => {
             }
         }
 
-        // api call
         const { data } = await axios.put(
-            `/api/product-update/${id}/`,
+            `${API_URL}/api/product-update/${id}/`,
             product,
             config
         )
@@ -186,13 +216,18 @@ export const updateProduct = (id, product) => async (dispatch, getState) => {
     } catch (error) {
         dispatch({
             type: UPDATE_PRODUCT_FAIL,
-            payload: error.response && error.response.data.detail ? error.response.data.detail : error.message
+            payload:
+                error.response && error.response.data.detail
+                    ? error.response.data.detail
+                    : error.message
         })
     }
 }
 
 
-// change ordered product delivery status
+// ================================
+// CHANGE DELIVERY STATUS
+// ================================
 export const changeDeliveryStatus = (id, product) => async (dispatch, getState) => {
 
     try {
@@ -200,7 +235,6 @@ export const changeDeliveryStatus = (id, product) => async (dispatch, getState) 
             type: CHANGE_DELIVERY_STATUS_REQUEST
         })
 
-        // login reducer
         const {
             userLoginReducer: { userInfo },
         } = getState()
@@ -212,9 +246,8 @@ export const changeDeliveryStatus = (id, product) => async (dispatch, getState) 
             }
         }
 
-        // api call
         const { data } = await axios.put(
-            `/account/change-order-status/${id}/`,
+            `${API_URL}/account/change-order-status/${id}/`,
             product,
             config
         )
@@ -227,7 +260,10 @@ export const changeDeliveryStatus = (id, product) => async (dispatch, getState) 
     } catch (error) {
         dispatch({
             type: CHANGE_DELIVERY_STATUS_FAIL,
-            payload: error.response && error.response.data.detail ? error.response.data.detail : error.message
+            payload:
+                error.response && error.response.data.detail
+                    ? error.response.data.detail
+                    : error.message
         })
     }
 }
