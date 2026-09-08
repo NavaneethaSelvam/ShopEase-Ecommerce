@@ -1,7 +1,6 @@
 {
   "name": "frontend",
   "version": "0.1.0",
-  "proxy": "http://127.0.0.1:8000",
   "private": true,
   "dependencies": {
     "@stripe/react-stripe-js": "^1.4.1",
@@ -36,6 +35,7 @@
     ]
   },
   "browserslist": {
+    
     "production": [
       ">0.2%",
       "not dead",
