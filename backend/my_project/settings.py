@@ -9,6 +9,7 @@ import os
 from pathlib import Path
 from datetime import timedelta
 
+
 # ---------------------------------------------------------
 # BASE DIRECTORY
 # ---------------------------------------------------------
@@ -25,12 +26,18 @@ SECRET_KEY = os.environ.get(
     'django-insecure-development-only-key'
 )
 
-DEBUG = os.environ.get('DEBUG', 'True').lower() == 'true'
+DEBUG = os.environ.get(
+    'DEBUG',
+    'True'
+).lower() == 'true'
 
-ALLOWED_HOSTS = os.environ.get(
-    'ALLOWED_HOSTS',
-    'localhost,127.0.0.1'
-).split(',')
+
+# Render + Localhost
+ALLOWED_HOSTS = [
+    'localhost',
+    '127.0.0.1',
+    'shopease-backend-5flz.onrender.com',
+]
 
 
 # ---------------------------------------------------------
@@ -38,6 +45,7 @@ ALLOWED_HOSTS = os.environ.get(
 # ---------------------------------------------------------
 
 INSTALLED_APPS = [
+
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -59,15 +67,21 @@ INSTALLED_APPS = [
 # ---------------------------------------------------------
 
 MIDDLEWARE = [
+
     'django.middleware.security.SecurityMiddleware',
+
     'django.contrib.sessions.middleware.SessionMiddleware',
 
     'corsheaders.middleware.CorsMiddleware',
 
     'django.middleware.common.CommonMiddleware',
+
     'django.middleware.csrf.CsrfViewMiddleware',
+
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+
     'django.contrib.messages.middleware.MessageMiddleware',
+
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
@@ -84,15 +98,24 @@ ROOT_URLCONF = 'my_project.urls'
 # ---------------------------------------------------------
 
 TEMPLATES = [
+
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
+
         'DIRS': [],
+
         'APP_DIRS': True,
+
         'OPTIONS': {
+
             'context_processors': [
+
                 'django.template.context_processors.debug',
+
                 'django.template.context_processors.request',
+
                 'django.contrib.auth.context_processors.auth',
+
                 'django.contrib.messages.context_processors.messages',
             ],
         },
@@ -110,12 +133,13 @@ WSGI_APPLICATION = 'my_project.wsgi.application'
 # ---------------------------------------------------------
 # DATABASE
 # ---------------------------------------------------------
-# For now, SQLite is kept for the initial deployment.
-# We can configure a production database separately.
 
 DATABASES = {
+
     'default': {
+
         'ENGINE': 'django.db.backends.sqlite3',
+
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
@@ -126,18 +150,22 @@ DATABASES = {
 # ---------------------------------------------------------
 
 AUTH_PASSWORD_VALIDATORS = [
+
     {
         'NAME':
         'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
     },
+
     {
         'NAME':
         'django.contrib.auth.password_validation.MinimumLengthValidator',
     },
+
     {
         'NAME':
         'django.contrib.auth.password_validation.CommonPasswordValidator',
     },
+
     {
         'NAME':
         'django.contrib.auth.password_validation.NumericPasswordValidator',
@@ -154,7 +182,9 @@ LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'Asia/Kolkata'
 
 USE_I18N = True
+
 USE_L10N = True
+
 USE_TZ = True
 
 
@@ -163,23 +193,33 @@ USE_TZ = True
 # ---------------------------------------------------------
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=300),
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
+
+    'ACCESS_TOKEN_LIFETIME':
+        timedelta(minutes=300),
+
+    'REFRESH_TOKEN_LIFETIME':
+        timedelta(days=1),
 
     'ROTATE_REFRESH_TOKENS': False,
+
     'BLACKLIST_AFTER_ROTATION': True,
+
     'UPDATE_LAST_LOGIN': False,
 
     'ALGORITHM': 'HS256',
 
     'VERIFYING_KEY': None,
+
     'AUDIENCE': None,
+
     'ISSUER': None,
 
     'AUTH_HEADER_TYPES': ('Bearer',),
+
     'AUTH_HEADER_NAME': 'HTTP_AUTHORIZATION',
 
     'USER_ID_FIELD': 'id',
+
     'USER_ID_CLAIM': 'user_id',
 
     'USER_AUTHENTICATION_RULE':
@@ -193,10 +233,14 @@ SIMPLE_JWT = {
 
     'JTI_CLAIM': 'jti',
 
-    'SLIDING_TOKEN_REFRESH_EXP_CLAIM': 'refresh_exp',
+    'SLIDING_TOKEN_REFRESH_EXP_CLAIM':
+        'refresh_exp',
 
-    'SLIDING_TOKEN_LIFETIME': timedelta(minutes=5),
-    'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=1),
+    'SLIDING_TOKEN_LIFETIME':
+        timedelta(minutes=5),
+
+    'SLIDING_TOKEN_REFRESH_LIFETIME':
+        timedelta(days=1),
 }
 
 
@@ -205,7 +249,9 @@ SIMPLE_JWT = {
 # ---------------------------------------------------------
 
 REST_FRAMEWORK = {
+
     'DEFAULT_AUTHENTICATION_CLASSES': (
+
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     )
 }
@@ -231,7 +277,11 @@ STRIPE_TEST_SECRET_KEY = os.environ.get(
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static'),
+
+    os.path.join(
+        BASE_DIR,
+        'static'
+    ),
 ]
 
 
@@ -251,9 +301,6 @@ MEDIA_ROOT = os.path.join(
 # ---------------------------------------------------------
 # CORS
 # ---------------------------------------------------------
-# Temporary setting for initial deployment.
-# After React frontend is deployed, replace this with the
-# actual frontend URL for better security.
 
 CORS_ALLOW_ALL_ORIGINS = True
 
