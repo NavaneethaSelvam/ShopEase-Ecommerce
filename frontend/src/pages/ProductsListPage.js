@@ -1,4 +1,3 @@
-
 import React, { useEffect, useMemo } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { getProductsList } from '../actions/productActions'
@@ -34,8 +33,52 @@ function ProductsListPage() {
     const {
         loading,
         error,
-        products = []
+        products
     } = productsListReducer
+
+
+    // =========================================
+    // SAFE PRODUCTS ARRAY
+    // =========================================
+
+    const productArray = useMemo(() => {
+
+        // Already an array
+        if (Array.isArray(products)) {
+            return products
+        }
+
+        // If API response is:
+        // { results: [...] }
+        if (
+            products &&
+            Array.isArray(products.results)
+        ) {
+            return products.results
+        }
+
+        // If API response is:
+        // { products: [...] }
+        if (
+            products &&
+            Array.isArray(products.products)
+        ) {
+            return products.products
+        }
+
+        // If API response is:
+        // { data: [...] }
+        if (
+            products &&
+            Array.isArray(products.data)
+        ) {
+            return products.data
+        }
+
+        // Otherwise return empty array
+        return []
+
+    }, [products])
 
 
     // =========================================
@@ -67,7 +110,6 @@ function ProductsListPage() {
 
         const description =
             (product.description || '').toLowerCase()
-
 
         const text =
             name + ' ' +
@@ -275,34 +317,56 @@ function ProductsListPage() {
     // SEARCH + CATEGORY FILTER
     // =========================================
 
-const filteredProducts = useMemo(() => {
+    const filteredProducts = useMemo(() => {
 
-    const search = searchTerm.toLowerCase().trim()
+        const search =
+            searchTerm.toLowerCase().trim()
 
-    return products.filter((product) => {
+        return productArray.filter((product) => {
 
-        const name = (product.name || '').toLowerCase()
-        const description = (product.description || '').toLowerCase()
-        const productCategory = (product.category || '').toLowerCase()
+            const name =
+                (product.name || '').toLowerCase()
 
-        // SEARCH
-        const matchesSearch =
-            !search ||
-            name.includes(search) ||
-            description.includes(search) ||
-            productCategory.includes(search)
+            const description =
+                (product.description || '').toLowerCase()
 
-        // CATEGORY
-        const matchesCategory =
-            !category ||
-            category === 'Popular' ||
-            getCategory(product) === category
+            const productCategory =
+                (product.category || '').toLowerCase()
 
-        return matchesSearch && matchesCategory
 
-    })
+            // =========================================
+            // SEARCH
+            // =========================================
 
-}, [products, searchTerm, category])
+            const matchesSearch =
+                !search ||
+                name.includes(search) ||
+                description.includes(search) ||
+                productCategory.includes(search)
+
+
+            // =========================================
+            // CATEGORY
+            // =========================================
+
+            const matchesCategory =
+                !category ||
+                category === 'Popular' ||
+                getCategory(product) === category
+
+
+            return (
+                matchesSearch &&
+                matchesCategory
+            )
+
+        })
+
+    }, [
+        productArray,
+        searchTerm,
+        category
+    ])
 
 
     // =========================================
@@ -311,17 +375,27 @@ const filteredProducts = useMemo(() => {
 
     useEffect(() => {
 
-        if (products.length > 0) {
+        console.log(
+            'PRODUCT API RESPONSE:',
+            products
+        )
 
-            console.log(
-                'TOTAL PRODUCTS:',
-                products.length
-            )
+        console.log(
+            'PRODUCT ARRAY:',
+            productArray
+        )
 
+        console.log(
+            'TOTAL PRODUCTS:',
+            productArray.length
+        )
+
+
+        if (productArray.length > 0) {
 
             console.log(
                 'PRODUCT NAMES:',
-                products.map(product => ({
+                productArray.map(product => ({
                     name: product.name,
                     category: product.category,
                     detectedCategory: getCategory(product)
@@ -331,21 +405,28 @@ const filteredProducts = useMemo(() => {
 
             console.log(
                 'CATEGORY COUNTS:',
-                products.reduce((result, product) => {
+                productArray.reduce(
+                    (result, product) => {
 
-                    const cat = getCategory(product)
+                        const cat =
+                            getCategory(product)
 
-                    result[cat] =
-                        (result[cat] || 0) + 1
+                        result[cat] =
+                            (result[cat] || 0) + 1
 
-                    return result
+                        return result
 
-                }, {})
+                    },
+                    {}
+                )
             )
 
         }
 
-    }, [products])
+    }, [
+        products,
+        productArray
+    ])
 
 
     // =========================================
@@ -362,7 +443,9 @@ const filteredProducts = useMemo(() => {
 
             history.push(
                 '/?searchTerm=' +
-                encodeURIComponent(value.trim())
+                encodeURIComponent(
+                    value.trim()
+                )
             )
 
         } else {
@@ -718,14 +801,16 @@ const filteredProducts = useMemo(() => {
 
                         <div className="product-grid">
 
-                            {filteredProducts.map((product) => (
+                            {filteredProducts.map(
+                                (product) => (
 
-                                <Product
-                                    key={product.id}
-                                    product={product}
-                                />
+                                    <Product
+                                        key={product.id}
+                                        product={product}
+                                    />
 
-                            ))}
+                                )
+                            )}
 
                         </div>
 
@@ -785,4 +870,3 @@ const filteredProducts = useMemo(() => {
 
 
 export default ProductsListPage
-
