@@ -24,9 +24,34 @@ const CreateCardComponent = ({
     // SAFE STRIPE CARDS
     // =========================================
 
-    const safeStripeCards = Array.isArray(stripeCards)
-        ? stripeCards
-        : []
+    let safeStripeCards = []
+
+    if (Array.isArray(stripeCards)) {
+
+        safeStripeCards = stripeCards
+
+    } else if (
+        stripeCards &&
+        Array.isArray(stripeCards.results)
+    ) {
+
+        safeStripeCards = stripeCards.results
+
+    } else if (
+        stripeCards &&
+        Array.isArray(stripeCards.cards)
+    ) {
+
+        safeStripeCards = stripeCards.cards
+
+    } else if (
+        stripeCards &&
+        Array.isArray(stripeCards.data)
+    ) {
+
+        safeStripeCards = stripeCards.data
+
+    }
 
 
     // =========================================
@@ -113,6 +138,26 @@ const CreateCardComponent = ({
         success: deleteSuccess,
         error: deleteError
     } = deleteSavedCardReducer
+
+
+    // =========================================
+    // DEBUG
+    // =========================================
+
+    console.log(
+        "STRIPE CARDS RESPONSE:",
+        stripeCards
+    )
+
+    console.log(
+        "SAFE STRIPE CARDS:",
+        safeStripeCards
+    )
+
+    console.log(
+        "SAFE STRIPE CARDS COUNT:",
+        safeStripeCards.length
+    )
 
 
     // =========================================
@@ -215,7 +260,7 @@ const CreateCardComponent = ({
 
 
         // =====================================
-        // EXPIRY MONTH VALIDATION
+        // EXPIRY MONTH
         // =====================================
 
         if (!expMonth) {
@@ -229,7 +274,7 @@ const CreateCardComponent = ({
 
 
         // =====================================
-        // EXPIRY YEAR VALIDATION
+        // EXPIRY YEAR
         // =====================================
 
         if (!expYear) {
@@ -243,7 +288,7 @@ const CreateCardComponent = ({
 
 
         // =====================================
-        // CVC VALIDATION
+        // CVC
         // =====================================
 
         const cleanCvc =
@@ -291,7 +336,7 @@ const CreateCardComponent = ({
 
 
         // =====================================
-        // DATA
+        // CARD DATA
         // =====================================
 
         const data = {
@@ -559,7 +604,6 @@ const CreateCardComponent = ({
                 }}
             >
 
-
                 <button
                     type="button"
                     className={
@@ -589,10 +633,7 @@ const CreateCardComponent = ({
                         }
                     >
 
-
-                        {/* =================================
-                            EMAIL
-                        ================================= */}
+                        {/* EMAIL */}
 
                         {differentCard ? (
 
@@ -605,7 +646,6 @@ const CreateCardComponent = ({
                                     </b>
 
                                 </Form.Label>
-
 
                                 <Form.Control
                                     autoFocus
@@ -665,9 +705,7 @@ const CreateCardComponent = ({
                         </p>
 
 
-                        {/* =================================
-                            CARD NUMBER
-                        ================================= */}
+                        {/* CARD NUMBER */}
 
                         <Form.Group className="mb-3">
 
@@ -720,14 +758,9 @@ const CreateCardComponent = ({
                         </Form.Group>
 
 
-                        {/* =================================
-                            EXPIRY + CVC
-                        ================================= */}
+                        {/* EXPIRY + CVC */}
 
                         <Row>
-
-
-                            {/* MONTH */}
 
                             <Col>
 
@@ -788,8 +821,6 @@ const CreateCardComponent = ({
 
                             </Col>
 
-
-                            {/* YEAR */}
 
                             <Col>
 
@@ -855,8 +886,6 @@ const CreateCardComponent = ({
                             </Col>
 
 
-                            {/* CVC */}
-
                             <Col>
 
                                 <Form.Group className="mb-3">
@@ -914,9 +943,7 @@ const CreateCardComponent = ({
                         </Row>
 
 
-                        {/* =================================
-                            SAVE CARD
-                        ================================= */}
+                        {/* SAVE CARD */}
 
                         {!differentCard && (
 
@@ -947,9 +974,7 @@ const CreateCardComponent = ({
                         )}
 
 
-                        {/* =================================
-                            SUBMIT
-                        ================================= */}
+                        {/* SUBMIT */}
 
                         <Button
 
@@ -1016,134 +1041,134 @@ const CreateCardComponent = ({
                     💳 Saved Cards
                 </h5>
 
-
                 <hr />
 
 
-                {/* IMPORTANT:
-                    Always check Array.isArray()
-                    before using .map()
-                */}
-
                 {safeStripeCards.length > 0 ? (
 
-                    safeStripeCards.map(
-                        (cardData) => (
+                    <div>
 
-                            <div
-                                key={cardData.id}
-                                className="mb-3"
-                            >
+                        {safeStripeCards.map(
+                            (cardData, index) => {
 
-                                <Card
-                                    className="p-3"
-                                    style={{
-                                        border:
-                                            "1px solid #C6ACE7",
-                                        borderRadius:
-                                            "12px"
-                                    }}
-                                >
+                                if (!cardData) {
+                                    return null
+                                }
 
+                                return (
 
-                                    {/* CARD NUMBER */}
+                                    <div
+                                        key={
+                                            cardData.id ||
+                                            cardData.card_number ||
+                                            index
+                                        }
+                                        className="mb-3"
+                                    >
 
-                                    <p>
-
-                                        <b>
-                                            Card Number:
-                                        </b>{" "}
-
-                                        XXXX XXXX XXXX{" "}
-
-                                        {cardData.card_number
-                                            ? cardData.card_number.slice(-4)
-                                            : "----"}
-
-                                    </p>
-
-
-                                    {/* CARD DETAILS */}
-
-                                    {showCardDetails(
-                                        cardData
-                                    )}
-
-
-                                    {/* BUTTONS */}
-
-                                    <div>
-
-                                        <button
-                                            type="button"
-                                            onClick={() => {
-
-                                                setCardDetails(
-                                                    true
-                                                )
-
-                                                setCardDetailsId(
-                                                    cardData.id
-                                                )
-
+                                        <Card
+                                            className="p-3"
+                                            style={{
+                                                border:
+                                                    "1px solid #C6ACE7",
+                                                borderRadius:
+                                                    "12px"
                                             }}
-                                            className="btn btn-sm btn-outline-primary"
                                         >
 
-                                            Show Card Details
+                                            <p>
 
-                                        </button>
+                                                <b>
+                                                    Card Number:
+                                                </b>{" "}
+
+                                                XXXX XXXX XXXX{" "}
+
+                                                {
+                                                    cardData.card_number
+                                                        ? cardData.card_number.slice(-4)
+                                                        : "----"
+                                                }
+
+                                            </p>
 
 
-                                        <button
-                                            type="button"
+                                            {showCardDetails(
+                                                cardData
+                                            )}
+
+
+                                            <div>
+
+                                                <button
+                                                    type="button"
+                                                    onClick={() => {
+
+                                                        setCardDetails(
+                                                            true
+                                                        )
+
+                                                        setCardDetailsId(
+                                                            cardData.id
+                                                        )
+
+                                                    }}
+                                                    className="btn btn-sm btn-outline-primary"
+                                                >
+
+                                                    Show Card Details
+
+                                                </button>
+
+
+                                                <button
+                                                    type="button"
+                                                    onClick={() =>
+                                                        payWithSavedCard(
+                                                            cardData
+                                                        )
+                                                    }
+                                                    className="ml-2 btn btn-sm btn-outline-success"
+                                                >
+
+                                                    Pay with this Card
+
+                                                </button>
+
+                                            </div>
+
+                                        </Card>
+
+
+                                        <span
+
                                             onClick={() =>
-                                                payWithSavedCard(
-                                                    cardData
+                                                history.push(
+                                                    "/stripe-card-details/"
                                                 )
                                             }
-                                            className="ml-2 btn btn-sm btn-outline-success"
+
+                                            style={{
+                                                cursor: "pointer"
+                                            }}
+
                                         >
 
-                                            Pay with this Card
+                                            <i
+                                                title="Edit card"
+                                                className="fas fa-edit fa-lg edit-button-css mr-2"
+                                            ></i>
 
-                                        </button>
+                                        </span>
+
 
                                     </div>
 
+                                )
+                            }
+                        )}
 
-                                </Card>
-
-
-                                {/* EDIT CARD */}
-
-                                <span
-
-                                    onClick={() =>
-                                        history.push(
-                                            "/stripe-card-details/"
-                                        )
-                                    }
-
-                                    style={{
-                                        cursor: "pointer"
-                                    }}
-
-                                >
-
-                                    <i
-                                        title="Edit card"
-                                        className="fas fa-edit fa-lg edit-button-css mr-2"
-                                    ></i>
-
-                                </span>
-
-
-                            </div>
-
-                        )
-
-                    )
+                    </div>
 
                 ) : (
 
@@ -1155,9 +1180,7 @@ const CreateCardComponent = ({
 
                 )}
 
-
             </Card>
-
 
         </div>
 

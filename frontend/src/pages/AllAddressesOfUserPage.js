@@ -1,5 +1,4 @@
-
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useMemo } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { Card, Modal, Button, Spinner } from 'react-bootstrap'
 
@@ -37,6 +36,7 @@ function AllAddressesOfUserPage() {
 
     const handleClose = () => {
         setShow(false)
+        setDeleteAddress(null)
     }
 
     const handleShow = () => {
@@ -78,21 +78,78 @@ function AllAddressesOfUserPage() {
 
     const {
         addresses,
-        loading: loadingAllAddresses
+        loading: loadingAllAddresses,
+        error: addressError
     } = getAllAddressesOfUserReducer
 
 
     // =========================================
-    // DELETE REDUCER
+    // SAFE ADDRESS ARRAY
     // =========================================
 
-    const deleteUserAddressReducer = useSelector(
-        state => state.deleteUserAddressReducer
-    )
+    const safeAddresses = useMemo(() => {
 
-    const {
-        success: addressDeletionSuccess
-    } = deleteUserAddressReducer
+        console.log(
+            "ALL ADDRESSES RAW RESPONSE:",
+            addresses
+        )
+
+        // Direct array
+        if (Array.isArray(addresses)) {
+
+            return addresses
+        }
+
+        // Django REST Framework result
+        if (
+            addresses &&
+            Array.isArray(addresses.results)
+        ) {
+
+            return addresses.results
+        }
+
+        // Custom addresses property
+        if (
+            addresses &&
+            Array.isArray(addresses.addresses)
+        ) {
+
+            return addresses.addresses
+        }
+
+        // Custom data property
+        if (
+            addresses &&
+            Array.isArray(addresses.data)
+        ) {
+
+            return addresses.data
+        }
+
+        // Anything else
+        return []
+
+    }, [addresses])
+
+
+    // =========================================
+    // DEBUG
+    // =========================================
+
+    useEffect(() => {
+
+        console.log(
+            "SAFE ADDRESSES:",
+            safeAddresses
+        )
+
+        console.log(
+            "TOTAL SAFE ADDRESSES:",
+            safeAddresses.length
+        )
+
+    }, [safeAddresses])
 
 
     // =========================================
@@ -153,6 +210,19 @@ function AllAddressesOfUserPage() {
 
 
     // =========================================
+    // DELETE REDUCER
+    // =========================================
+
+    const deleteUserAddressReducer = useSelector(
+        state => state.deleteUserAddressReducer
+    )
+
+    const {
+        success: addressDeletionSuccess
+    } = deleteUserAddressReducer
+
+
+    // =========================================
     // DELETE SUCCESS
     // =========================================
 
@@ -193,10 +263,15 @@ function AllAddressesOfUserPage() {
 
     const confirmDelete = () => {
 
-        if (deleteAddress) {
+        if (
+            deleteAddress &&
+            deleteAddress.id
+        ) {
 
             dispatch(
-                deleteUserAddress(deleteAddress.id)
+                deleteUserAddress(
+                    deleteAddress.id
+                )
             )
         }
 
@@ -209,6 +284,7 @@ function AllAddressesOfUserPage() {
     // =========================================
 
     const goBack = () => {
+
         history.goBack()
     }
 
@@ -359,7 +435,9 @@ function AllAddressesOfUserPage() {
                     <section className="saved-address-section">
 
 
-                        {/* SECTION HEADER */}
+                        {/* =====================================
+                            SECTION HEADER
+                        ===================================== */}
 
                         <div className="section-title">
 
@@ -379,9 +457,7 @@ function AllAddressesOfUserPage() {
                             <div className="address-count">
 
                                 <strong>
-                                    {addresses
-                                        ? addresses.length
-                                        : 0}
+                                    {safeAddresses.length}
                                 </strong>
 
                                 <span>
@@ -394,25 +470,23 @@ function AllAddressesOfUserPage() {
 
 
                         {/* =====================================
-                            NO ADDRESS
+                            ADDRESS ERROR
                         ===================================== */}
 
-                        {(!addresses ||
-                            addresses.length === 0) && (
+                        {addressError && (
 
                             <div className="no-address-card">
 
                                 <div className="no-address-icon">
-                                    📍
+                                    ⚠️
                                 </div>
 
                                 <h3>
-                                    No saved addresses
+                                    Unable to load addresses
                                 </h3>
 
                                 <p>
-                                    Add a billing address below to continue
-                                    with your order.
+                                    {addressError}
                                 </p>
 
                             </div>
@@ -421,152 +495,197 @@ function AllAddressesOfUserPage() {
 
 
                         {/* =====================================
+                            NO ADDRESS
+                        ===================================== */}
+
+                        {!addressError &&
+                            safeAddresses.length === 0 && (
+
+                                <div className="no-address-card">
+
+                                    <div className="no-address-icon">
+                                        📍
+                                    </div>
+
+                                    <h3>
+                                        No saved addresses
+                                    </h3>
+
+                                    <p>
+                                        Add a billing address below to
+                                        continue with your order.
+                                    </p>
+
+                                </div>
+
+                            )}
+
+
+                        {/* =====================================
                             ADDRESS LIST
                         ===================================== */}
 
-                        {addresses &&
-                            addresses.length > 0 &&
-                            addresses.map(
-                                (address, idx) => (
+                        {safeAddresses.length > 0 &&
 
-                                    <Card
-                                        key={
-                                            address.id || idx
-                                        }
-                                        className="address-item-card"
-                                    >
+                            safeAddresses.map(
+                                (address, idx) => {
 
+                                    // Extra safety
+                                    if (!address) {
+                                        return null
+                                    }
 
-                                        {/* ADDRESS CONTENT */}
+                                    return (
 
-                                        <div className="address-card-top">
-
-
-                                            {/* LOCATION ICON */}
-
-                                            <div className="address-icon">
-
-                                                <span>
-                                                    📍
-                                                </span>
-
-                                            </div>
+                                        <Card
+                                            key={
+                                                address.id ||
+                                                `address-${idx}`
+                                            }
+                                            className="address-item-card"
+                                        >
 
 
-                                            {/* MAIN DETAILS */}
+                                            {/* =================================
+                                                ADDRESS CONTENT
+                                            ================================= */}
 
-                                            <div className="address-main">
-
-
-                                                {/* NAME */}
-
-                                                <div className="address-name-row">
-
-                                                    <h3>
-                                                        {address.name}
-                                                    </h3>
-
-                                                    <span className="saved-badge">
-                                                        SAVED
-                                                    </span>
-
-                                                </div>
+                                            <div className="address-card-top">
 
 
-                                                {/* PHONE */}
+                                                {/* LOCATION ICON */}
 
-                                                <p className="address-phone">
-
-                                                    <span className="phone-icon">
-                                                        📞
-                                                    </span>
-
-                                                    +91{' '}
-                                                    {address.phone_number}
-
-                                                </p>
-
-
-                                                {/* ADDRESS */}
-
-                                                <div className="address-text">
-
-                                                    <span className="address-line-icon">
-                                                        🏠
-                                                    </span>
+                                                <div className="address-icon">
 
                                                     <span>
-
-                                                        {address.house_no}
-
-                                                        {address.landmark &&
-                                                            `, near ${address.landmark}`}
-
-                                                        {address.city &&
-                                                            `, ${address.city}`}
-
-                                                        {address.state &&
-                                                            `, ${address.state}`}
-
-                                                        {address.pin_code &&
-                                                            ` - ${address.pin_code}`}
-
+                                                        📍
                                                     </span>
+
+                                                </div>
+
+
+                                                {/* MAIN DETAILS */}
+
+                                                <div className="address-main">
+
+
+                                                    {/* NAME */}
+
+                                                    <div className="address-name-row">
+
+                                                        <h3>
+                                                            {address.name ||
+                                                                'No Name'}
+                                                        </h3>
+
+                                                        <span className="saved-badge">
+                                                            SAVED
+                                                        </span>
+
+                                                    </div>
+
+
+                                                    {/* PHONE */}
+
+                                                    <p className="address-phone">
+
+                                                        <span className="phone-icon">
+                                                            📞
+                                                        </span>
+
+                                                        +91{' '}
+
+                                                        {address.phone_number ||
+                                                            'N/A'}
+
+                                                    </p>
+
+
+                                                    {/* ADDRESS */}
+
+                                                    <div className="address-text">
+
+                                                        <span className="address-line-icon">
+                                                            🏠
+                                                        </span>
+
+                                                        <span>
+
+                                                            {address.house_no ||
+                                                                ''}
+
+                                                            {address.landmark &&
+                                                                `, near ${address.landmark}`}
+
+                                                            {address.city &&
+                                                                `, ${address.city}`}
+
+                                                            {address.state &&
+                                                                `, ${address.state}`}
+
+                                                            {address.pin_code &&
+                                                                ` - ${address.pin_code}`}
+
+                                                        </span>
+
+                                                    </div>
 
                                                 </div>
 
                                             </div>
 
-                                        </div>
+
+                                            {/* =================================
+                                                ACTION BUTTONS
+                                            ================================= */}
+
+                                            <div className="address-actions">
 
 
-                                        {/* =================================
-                                            ACTION BUTTONS
-                                        ================================= */}
+                                                {/* EDIT */}
 
-                                        <div className="address-actions">
+                                                <button
+                                                    className="edit-address-action"
+                                                    onClick={() =>
+                                                        history.push(
+                                                            `/all-addresses/${address.id}/`
+                                                        )
+                                                    }
+                                                >
 
+                                                    <span>
+                                                        ✏️
+                                                    </span>
 
-                                            <button
-                                                className="edit-address-action"
-                                                onClick={() =>
-                                                    history.push(
-                                                        `/all-addresses/${address.id}/`
-                                                    )
-                                                }
-                                            >
+                                                    Edit Address
 
-                                                <span>
-                                                    ✏️
-                                                </span>
-
-                                                Edit Address
-
-                                            </button>
+                                                </button>
 
 
-                                            <button
-                                                className="delete-address-action"
-                                                onClick={() =>
-                                                    deleteAddressHandler(
-                                                        address
-                                                    )
-                                                }
-                                            >
+                                                {/* DELETE */}
 
-                                                <span>
-                                                    🗑️
-                                                </span>
+                                                <button
+                                                    className="delete-address-action"
+                                                    onClick={() =>
+                                                        deleteAddressHandler(
+                                                            address
+                                                        )
+                                                    }
+                                                >
 
-                                                Delete
+                                                    <span>
+                                                        🗑️
+                                                    </span>
 
-                                            </button>
+                                                    Delete
 
-                                        </div>
+                                                </button>
 
-                                    </Card>
+                                            </div>
 
-                                )
+                                        </Card>
+                                    )
+                                }
                             )}
 
                     </section>
@@ -584,6 +703,7 @@ function AllAddressesOfUserPage() {
                     {/* DECORATIVE CIRCLES */}
 
                     <div className="new-address-glow glow-one"></div>
+
                     <div className="new-address-glow glow-two"></div>
 
 
@@ -634,4 +754,3 @@ function AllAddressesOfUserPage() {
 
 
 export default AllAddressesOfUserPage
-
