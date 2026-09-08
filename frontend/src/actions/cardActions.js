@@ -23,7 +23,15 @@ import {
 
 import axios from 'axios'
 
-// create card
+
+// Render Backend URL
+const API_URL = "https://shopease-backend-5flz.onrender.com"
+
+
+// ======================================================
+// CREATE CARD
+// ======================================================
+
 export const createCard = (cardData) => async (dispatch, getState) => {
 
     try {
@@ -44,16 +52,15 @@ export const createCard = (cardData) => async (dispatch, getState) => {
             }
         }
 
-        // api call
         const { data } = await axios.post(
-            "/payments/create-card/",
+            `${API_URL}/payments/create-card/`,
             {
-                'email': cardData.email,
-                'number': cardData.cardNumber,
-                'exp_month': cardData.expMonth,
-                'exp_year': cardData.expYear,
-                'cvc': cardData.cvc,
-                'save_card': cardData.saveCard
+                email: cardData.email,
+                number: cardData.cardNumber,
+                exp_month: cardData.expMonth,
+                exp_year: cardData.expYear,
+                cvc: cardData.cvc,
+                save_card: cardData.saveCard
             },
             config
         )
@@ -64,15 +71,22 @@ export const createCard = (cardData) => async (dispatch, getState) => {
         })
 
     } catch (error) {
+
         dispatch({
             type: CARD_CREATE_FAIL,
-            payload: error.response && error.response.data.detail ? error.response.data.detail : error.message
+            payload:
+                error.response && error.response.data.detail
+                    ? error.response.data.detail
+                    : error.message
         })
     }
 }
 
 
-// charge customer
+// ======================================================
+// CHARGE CUSTOMER
+// ======================================================
+
 export const chargeCustomer = (cardData) => async (dispatch, getState) => {
 
     try {
@@ -92,9 +106,8 @@ export const chargeCustomer = (cardData) => async (dispatch, getState) => {
             }
         }
 
-        // api call
         const { data } = await axios.post(
-            "/payments/charge-customer/",
+            `${API_URL}/payments/charge-customer/`,
             cardData,
             config
         )
@@ -105,18 +118,26 @@ export const chargeCustomer = (cardData) => async (dispatch, getState) => {
         })
 
     } catch (error) {
+
         dispatch({
             type: CHARGE_CARD_FAIL,
-            payload: error.response && error.response.data.detail ? error.response.data.detail : error.message
+            payload:
+                error.response && error.response.data.detail
+                    ? error.response.data.detail
+                    : error.message
         })
     }
 }
 
 
-// saved cards list
+// ======================================================
+// SAVED CARDS LIST
+// ======================================================
+
 export const savedCardsList = () => async (dispatch, getState) => {
 
     try {
+
         dispatch({
             type: SAVED_CARDS_LIST_REQUEST,
         })
@@ -132,8 +153,10 @@ export const savedCardsList = () => async (dispatch, getState) => {
             }
         }
 
-        // api call
-        const { data } = await axios.get('/account/stripe-cards/', config)
+        const { data } = await axios.get(
+            `${API_URL}/account/stripe-cards/`,
+            config
+        )
 
         dispatch({
             type: SAVED_CARDS_LIST_SUCCESS,
@@ -141,15 +164,22 @@ export const savedCardsList = () => async (dispatch, getState) => {
         })
 
     } catch (error) {
+
         dispatch({
             type: SAVED_CARDS_LIST_FAIL,
-            payload: error.response && error.response.data.detail ? error.response.data.detail : error.message
+            payload:
+                error.response && error.response.data.detail
+                    ? error.response.data.detail
+                    : error.message
         })
     }
 }
 
 
-// update stripe card
+// ======================================================
+// UPDATE STRIPE CARD
+// ======================================================
+
 export const updateStripeCard = (cardData) => async (dispatch, getState) => {
 
     try {
@@ -169,9 +199,8 @@ export const updateStripeCard = (cardData) => async (dispatch, getState) => {
             }
         }
 
-        // api call
         const { data } = await axios.post(
-            "/payments/update-card/",
+            `${API_URL}/payments/update-card/`,
             cardData,
             config
         )
@@ -182,19 +211,26 @@ export const updateStripeCard = (cardData) => async (dispatch, getState) => {
         })
 
     } catch (error) {
+
         dispatch({
             type: UPDATE_STRIPE_CARD_FAIL,
-            payload: error.response && error.response.data.detail ? error.response.data.detail : error.message
+            payload:
+                error.response && error.response.data.detail
+                    ? error.response.data.detail
+                    : error.message
         })
     }
 }
 
 
+// ======================================================
+// DELETE SAVED CARD
+// ======================================================
 
-// delete saved card
 export const deleteSavedCard = (card_number) => async (dispatch, getState) => {
 
     try {
+
         dispatch({
             type: DELETE_SAVED_CARD_REQUEST,
         })
@@ -210,10 +246,11 @@ export const deleteSavedCard = (card_number) => async (dispatch, getState) => {
             }
         }
 
-        // api call
         const { data } = await axios.post(
-            '/payments/delete-card/',
-            { "card_number": card_number },
+            `${API_URL}/payments/delete-card/`,
+            {
+                card_number: card_number
+            },
             config
         )
 
@@ -223,9 +260,13 @@ export const deleteSavedCard = (card_number) => async (dispatch, getState) => {
         })
 
     } catch (error) {
+
         dispatch({
             type: DELETE_SAVED_CARD_FAIL,
-            payload: error.response && error.response.data.detail ? error.response.data.detail : error.message
+            payload:
+                error.response && error.response.data.detail
+                    ? error.response.data.detail
+                    : error.message
         })
     }
 }

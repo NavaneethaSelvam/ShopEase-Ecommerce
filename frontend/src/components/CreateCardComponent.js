@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react'
 import { useHistory, Link } from 'react-router-dom'
 import { Form, Button, Row, Col, Card, Spinner } from 'react-bootstrap'
@@ -19,6 +18,15 @@ const CreateCardComponent = ({
 
     const history = useHistory()
     const dispatch = useDispatch()
+
+
+    // =========================================
+    // SAFE STRIPE CARDS
+    // =========================================
+
+    const safeStripeCards = Array.isArray(stripeCards)
+        ? stripeCards
+        : []
 
 
     // =========================================
@@ -335,6 +343,16 @@ const CreateCardComponent = ({
         }
 
 
+        if (!cardData) {
+
+            alert(
+                "Card information is not available"
+            )
+
+            return
+        }
+
+
         const data = {
 
             email:
@@ -404,14 +422,20 @@ const CreateCardComponent = ({
 
 
                     <p>
+
                         <b>Exp Month:</b>{" "}
+
                         {cardData.exp_month}
+
                     </p>
 
 
                     <p>
+
                         <b>Exp Year:</b>{" "}
+
                         {cardData.exp_year}
+
                     </p>
 
                 </div>
@@ -421,6 +445,7 @@ const CreateCardComponent = ({
         }
 
         return null
+
     }
 
 
@@ -503,7 +528,9 @@ const CreateCardComponent = ({
             {cardError && (
 
                 <Message variant="danger">
+
                     {cardError}
+
                 </Message>
 
             )}
@@ -512,7 +539,9 @@ const CreateCardComponent = ({
             {deleteError && (
 
                 <Message variant="danger">
+
                     {deleteError}
+
                 </Message>
 
             )}
@@ -729,7 +758,9 @@ const CreateCardComponent = ({
                                     >
 
                                         <option value="">
+
                                             -- Select Month --
+
                                         </option>
 
 
@@ -743,7 +774,9 @@ const CreateCardComponent = ({
                                                     key={i}
                                                     value={i + 1}
                                                 >
+
                                                     {i + 1}
+
                                                 </option>
 
                                             )
@@ -787,7 +820,9 @@ const CreateCardComponent = ({
                                     >
 
                                         <option value="">
+
                                             -- Select Year --
+
                                         </option>
 
 
@@ -803,9 +838,11 @@ const CreateCardComponent = ({
                                                         current_year + i
                                                     }
                                                 >
+
                                                     {
                                                         current_year + i
                                                     }
+
                                                 </option>
 
                                             )
@@ -983,10 +1020,14 @@ const CreateCardComponent = ({
                 <hr />
 
 
-                {stripeCards &&
-                stripeCards.length > 0 ? (
+                {/* IMPORTANT:
+                    Always check Array.isArray()
+                    before using .map()
+                */}
 
-                    stripeCards.map(
+                {safeStripeCards.length > 0 ? (
+
+                    safeStripeCards.map(
                         (cardData) => (
 
                             <div
@@ -1107,12 +1148,16 @@ const CreateCardComponent = ({
                 ) : (
 
                     <p className="text-muted mb-0">
+
                         No saved card.
+
                     </p>
 
                 )}
 
+
             </Card>
+
 
         </div>
 
@@ -1122,4 +1167,3 @@ const CreateCardComponent = ({
 
 
 export default CreateCardComponent
-
