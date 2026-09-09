@@ -4,31 +4,54 @@ from django.contrib.auth.models import User
 from rest_framework_simplejwt.tokens import RefreshToken
 
 
+# =========================================================
+# USER SERIALIZER
+# =========================================================
+
 class UserSerializer(serializers.ModelSerializer):
+
     admin = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = User
-        fields = ["id", "username", "email", "admin"]
+        fields = [
+            "id",
+            "username",
+            "email",
+            "admin"
+        ]
 
     def get_admin(self, obj):
         return obj.is_staff
 
 
-# creating tokens manually (with user registration we will also create tokens)
+# =========================================================
+# USER REGISTER TOKEN SERIALIZER
+# =========================================================
+
 class UserRegisterTokenSerializer(UserSerializer):
+
     token = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = User
-        fields = ["id", "username", "email", "admin", "token"]
+        fields = [
+            "id",
+            "username",
+            "email",
+            "admin",
+            "token"
+        ]
 
     def get_token(self, obj):
         token = RefreshToken.for_user(obj)
         return str(token.access_token)
 
 
-# list of cards
+# =========================================================
+# STRIPE CARD SERIALIZER
+# =========================================================
+
 class CardsListSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -36,7 +59,10 @@ class CardsListSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-# billing address details
+# =========================================================
+# BILLING ADDRESS SERIALIZER
+# =========================================================
+
 class BillingAddressSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -44,7 +70,10 @@ class BillingAddressSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-# all orders list
+# =========================================================
+# ORDERS SERIALIZER
+# =========================================================
+
 class AllOrdersListSerializer(serializers.ModelSerializer):
 
     class Meta:

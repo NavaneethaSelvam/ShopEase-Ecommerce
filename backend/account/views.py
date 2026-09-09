@@ -1,283 +1,649 @@
 from .models import StripeModel, BillingAddress, OrderModel
-from django.http import Http404
-from rest_framework import status
+
+from rest_framework import status, permissions
 from rest_framework.views import APIView
-from django.contrib.auth.models import User
 from rest_framework.response import Response
-from django.contrib.auth.hashers import make_password
-from rest_framework import authentication, permissions
-from rest_framework.decorators import permission_classes
-from rest_framework_simplejwt.serializers import TokenObtainPairSerializer 
-from rest_framework_simplejwt.views import TokenObtainPairView # for login page
-from django.contrib.auth.hashers import check_password
-from django.shortcuts import get_object_or_404
+
+from django.contrib.auth.models import User
+from django.contrib.auth.hashers import make_password, check_password
+
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from rest_framework_simplejwt.views import TokenObtainPairView
+
 from .serializers import (
-    UserSerializer, 
-    UserRegisterTokenSerializer, 
-    CardsListSerializer, 
+    UserSerializer,
+    UserRegisterTokenSerializer,
+    CardsListSerializer,
     BillingAddressSerializer,
     AllOrdersListSerializer
 )
 
 
-# register user
+# =========================================================
+# REGISTER USER
+# =========================================================
+
 class UserRegisterView(APIView):
-    """To Register the User"""
+    """Register a new user."""
 
     def post(self, request, format=None):
-        data = request.data # holds username and password (in dictionary)
-        username = data["username"]
-        email = data["email"]
 
-        if username == "" or email == "":
-            return Response({"detial": "username or email cannot be empty"}, status=status.HTTP_400_BAD_REQUEST)
+        data = request.data
 
-        else:
-            check_username = User.objects.filter(username=username).count()
-            check_email =  User.objects.filter(email=email).count()
+        username = data.get("username", "").strip()
+        email = data.get("email", "").strip()
+        password = data.get("password", "")
 
-            if check_username:
-                message = "A user with that username already exist!"
-                return Response({"detail": message}, status=status.HTTP_403_FORBIDDEN)
-            if check_email:
-                message = "A user with that email address already exist!"
-                return Response({"detail": message}, status=status.HTTP_403_FORBIDDEN)
-            else:
-                user = User.objects.create(
-                    username=username,
-                    email=email,
-                    password=make_password(data["password"]),
-                )
-                serializer = UserRegisterTokenSerializer(user, many=False)
-                return Response(serializer.data)
+        if username == "" or email == "" or password == "":
+            return Response(
+                {
+                    "detail": "Username, email and password cannot be empty."
+                },
+                status=status.HTTP_400_BAD_REQUEST
+            )
 
-# login user (customizing it so that we can see fields like username, email etc as a response 
-# from server, otherwise it will only provide access and refresh token)
+        check_username = User.objects.filter(
+            username=username
+        ).exists()
+
+        check_email = User.objects.filter(
+            email=email
+        ).exists()
+
+        if check_username:
+            return Response(
+                {
+                    "detail": "A user with that username already exists!"
+                },
+                status=status.HTTP_403_FORBIDDEN
+            )
+
+        if check_email:
+            return Response(
+                {
+                    "detail": "A user with that email address already exists!"
+                },
+                status=status.HTTP_403_FORBIDDEN
+            )
+
+        user = User.objects.create(
+            username=username,
+            email=email,
+            password=make_password(password)
+        )
+
+        serializer = UserRegisterTokenSerializer(
+            user,
+            many=False
+        )
+
+        return Response(
+            serializer.data,
+            status=status.HTTP_201_CREATED
+        )
+
+
+# =========================================================
+# LOGIN
+# =========================================================
+
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
-    
+
     def validate(self, attrs):
+
         data = super().validate(attrs)
 
-        serializer = UserRegisterTokenSerializer(self.user).data
+        serializer = UserRegisterTokenSerializer(
+            self.user
+        ).data
 
-        for k, v in serializer.items():
-            data[k] = v
-        
+        for key, value in serializer.items():
+            data[key] = value
+
         return data
 
+
 class MyTokenObtainPairView(TokenObtainPairView):
+
     serializer_class = MyTokenObtainPairSerializer
 
 
-# list all the cards (of currently logged in user only)
+# =========================================================
+# STRIPE CARDS LIST
+# =========================================================
+
 class CardsListView(APIView):
 
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [
+        permissions.IsAuthenticated
+    ]
 
     def get(self, request):
-        # show stripe cards of only that user which is equivalent 
-        #to currently logged in user
-        stripeCards = StripeModel.objects.filter(user=request.user)
-        serializer = CardsListSerializer(stripeCards, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
 
-# get user details
+        stripe_cards = StripeModel.objects.filter(
+            user=request.user
+        )
+
+        serializer = CardsListSerializer(
+            stripe_cards,
+            many=True
+        )
+
+        return Response(
+            serializer.data,
+            status=status.HTTP_200_OK
+        )
+
+
+# =========================================================
+# USER ACCOUNT DETAILS
+# =========================================================
+
 class UserAccountDetailsView(APIView):
 
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [
+        permissions.IsAuthenticated
+    ]
 
     def get(self, request, pk):
+
         try:
+
             user = User.objects.get(id=pk)
-            serializer = UserSerializer(user, many=False)
-            return Response(serializer.data, status=status.HTTP_200_OK)
-            
-        except:
-            return Response({"details": "User not found"}, status=status.HTTP_404_NOT_FOUND)
+
+            serializer = UserSerializer(
+                user,
+                many=False
+            )
+
+            return Response(
+                serializer.data,
+                status=status.HTTP_200_OK
+            )
+
+        except User.DoesNotExist:
+
+            return Response(
+                {
+                    "detail": "User not found."
+                },
+                status=status.HTTP_404_NOT_FOUND
+            )
 
 
-# update user account
+# =========================================================
+# UPDATE USER ACCOUNT
+# =========================================================
+
 class UserAccountUpdateView(APIView):
 
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [
+        permissions.IsAuthenticated
+    ]
 
     def put(self, request, pk):
-        user = User.objects.get(id=pk)
-        data = request.data
 
-        if user:
-            if request.user.id == user.id:
-                user.username = data["username"]
-                user.email = data["email"]
+        try:
 
-                if data["password"] != "":
-                    user.password = make_password(data["password"])
+            user = User.objects.get(id=pk)
 
-                user.save()
-                serializer = UserSerializer(user, many=False)
-                message = {"details": "User Successfully Updated.", "user": serializer.data}
-                return Response(message, status=status.HTTP_200_OK)
-            else:
-                return Response({"details": "Permission Denied."}, status.status.HTTP_403_FORBIDDEN)
-        else:
-            return Response({"details": "User not found."}, status=status.HTTP_404_NOT_FOUND)
+            if request.user.id != user.id:
+
+                return Response(
+                    {
+                        "detail": "Permission denied."
+                    },
+                    status=status.HTTP_403_FORBIDDEN
+                )
+
+            username = request.data.get(
+                "username",
+                user.username
+            )
+
+            email = request.data.get(
+                "email",
+                user.email
+            )
+
+            password = request.data.get(
+                "password",
+                ""
+            )
+
+            user.username = username
+            user.email = email
+
+            if password != "":
+                user.password = make_password(password)
+
+            user.save()
+
+            serializer = UserSerializer(
+                user,
+                many=False
+            )
+
+            return Response(
+                {
+                    "details": "User successfully updated.",
+                    "user": serializer.data
+                },
+                status=status.HTTP_200_OK
+            )
+
+        except User.DoesNotExist:
+
+            return Response(
+                {
+                    "detail": "User not found."
+                },
+                status=status.HTTP_404_NOT_FOUND
+            )
 
 
-# delete user account
+# =========================================================
+# DELETE USER ACCOUNT
+# =========================================================
+
 class UserAccountDeleteView(APIView):
 
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [
+        permissions.IsAuthenticated
+    ]
 
     def post(self, request, pk):
 
         try:
+
             user = User.objects.get(id=pk)
-            data = request.data
 
-            if request.user.id == user.id:
-                if check_password(data["password"], user.password):
-                    user.delete()
-                    return Response({"details": "User successfully deleted."}, status=status.HTTP_204_NO_CONTENT)
-                else:
-                    return Response({"details": "Incorrect password."}, status=status.HTTP_401_UNAUTHORIZED)
-            else:
-                return Response({"details": "Permission Denied."}, status=status.HTTP_403_FORBIDDEN)
-        except:
-            return Response({"details": "User not found."}, status=status.HTTP_404_NOT_FOUND)
+            if request.user.id != user.id:
+
+                return Response(
+                    {
+                        "detail": "Permission denied."
+                    },
+                    status=status.HTTP_403_FORBIDDEN
+                )
+
+            password = request.data.get(
+                "password",
+                ""
+            )
+
+            if check_password(
+                password,
+                user.password
+            ):
+
+                user.delete()
+
+                return Response(
+                    {
+                        "details": "User successfully deleted."
+                    },
+                    status=status.HTTP_204_NO_CONTENT
+                )
+
+            return Response(
+                {
+                    "detail": "Incorrect password."
+                },
+                status=status.HTTP_401_UNAUTHORIZED
+            )
+
+        except User.DoesNotExist:
+
+            return Response(
+                {
+                    "detail": "User not found."
+                },
+                status=status.HTTP_404_NOT_FOUND
+            )
 
 
-# get billing address (details of user address, all addresses)
+# =========================================================
+# GET ALL BILLING ADDRESSES
+# =========================================================
+
 class UserAddressesListView(APIView):
 
+    permission_classes = [
+        permissions.IsAuthenticated
+    ]
+
     def get(self, request):
-        user = request.user
-        user_address = BillingAddress.objects.filter(user=user)
-        serializer = BillingAddressSerializer(user_address, many=True)
-        
-        return Response(serializer.data, status=status.HTTP_200_OK)
+
+        user_addresses = BillingAddress.objects.filter(
+            user=request.user
+        )
+
+        serializer = BillingAddressSerializer(
+            user_addresses,
+            many=True
+        )
+
+        return Response(
+            serializer.data,
+            status=status.HTTP_200_OK
+        )
 
 
-# get specific address only
+# =========================================================
+# GET SINGLE ADDRESS
+# =========================================================
+
 class UserAddressDetailsView(APIView):
 
+    permission_classes = [
+        permissions.IsAuthenticated
+    ]
+
     def get(self, request, pk):
-        user_address = BillingAddress.objects.get(id=pk)
-        serializer = BillingAddressSerializer(user_address, many=False)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+
+        try:
+
+            user_address = BillingAddress.objects.get(
+                id=pk,
+                user=request.user
+            )
+
+            serializer = BillingAddressSerializer(
+                user_address,
+                many=False
+            )
+
+            return Response(
+                serializer.data,
+                status=status.HTTP_200_OK
+            )
+
+        except BillingAddress.DoesNotExist:
+
+            return Response(
+                {
+                    "detail": "Address not found."
+                },
+                status=status.HTTP_404_NOT_FOUND
+            )
 
 
-# create billing address
+# =========================================================
+# CREATE BILLING ADDRESS
+# =========================================================
+
 class CreateUserAddressView(APIView):
 
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [
+        permissions.IsAuthenticated
+    ]
 
     def post(self, request):
+
         data = request.data
-        
+
         new_address = {
-            "name": request.data["name"],
+            "name": data.get("name", "").strip(),
             "user": request.user.id,
-            "phone_number": request.data["phone_number"],
-            "pin_code": request.data["pin_code"],
-            "house_no": request.data["house_no"],
-            "landmark": request.data["landmark"],
-            "city": request.data["city"],
-            "state": request.data["state"],
+            "phone_number": data.get(
+                "phone_number",
+                ""
+            ).strip(),
+            "pin_code": data.get(
+                "pin_code",
+                ""
+            ).strip(),
+            "house_no": data.get(
+                "house_no",
+                ""
+            ).strip(),
+            "landmark": data.get(
+                "landmark",
+                ""
+            ).strip(),
+            "city": data.get(
+                "city",
+                ""
+            ).strip(),
+            "state": data.get(
+                "state",
+                ""
+            ).strip(),
         }
 
-        serializer = BillingAddressSerializer(data=new_address, many=False)
+        serializer = BillingAddressSerializer(
+            data=new_address,
+            many=False
+        )
+
         if serializer.is_valid():
+
             serializer.save()
-            return Response(serializer.data, status=status.HTTP_200_OK)
-        else:
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+            return Response(
+                serializer.data,
+                status=status.HTTP_201_CREATED
+            )
+
+        return Response(
+            {
+                "detail": "Address validation failed.",
+                "errors": serializer.errors
+            },
+            status=status.HTTP_400_BAD_REQUEST
+        )
 
 
-# edit billing address
+# =========================================================
+# UPDATE BILLING ADDRESS
+# =========================================================
+
 class UpdateUserAddressView(APIView):
 
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [
+        permissions.IsAuthenticated
+    ]
 
     def put(self, request, pk):
+
+        try:
+
+            user_address = BillingAddress.objects.get(
+                id=pk,
+                user=request.user
+            )
+
+        except BillingAddress.DoesNotExist:
+
+            return Response(
+                {
+                    "detail": "Address not found."
+                },
+                status=status.HTTP_404_NOT_FOUND
+            )
+
         data = request.data
 
-        try:
-            user_address = BillingAddress.objects.get(id=pk)
+        updated_address = {
+            "name": data.get(
+                "name",
+                user_address.name
+            ),
 
-            if request.user.id == user_address.user.id:
+            "user": request.user.id,
 
-                updated_address = {
-                    "name": data["name"] if data["name"] else user_address.name,
-                    "user": request.user.id,
-                    "phone_number": data["phone_number"] if data["phone_number"] else user_address.phone_number,
-                    "pin_code": data["pin_code"] if data["pin_code"] else user_address.pin_code,
-                    "house_no": data["house_no"] if data["house_no"] else user_address.house_no,
-                    "landmark": data["landmark"] if data["landmark"] else user_address.landmark,
-                    "city": data["city"] if data["city"] else user_address.city,
-                    "state": data["state"] if data["state"] else user_address.state,
-                }
+            "phone_number": data.get(
+                "phone_number",
+                user_address.phone_number
+            ),
 
-                serializer = BillingAddressSerializer(user_address, data=updated_address)
-                if serializer.is_valid():
-                    serializer.save()
-                    return Response(serializer.data, status=status.HTTP_200_OK)
-                else:
-                    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-            else:
-                return Response({"details": "Permission denied."}, status=status.HTTP_403_FORBIDDEN)
-        except:
-            return Response({"details": "Not found."}, status=status.HTTP_404_NOT_FOUND)
+            "pin_code": data.get(
+                "pin_code",
+                user_address.pin_code
+            ),
+
+            "house_no": data.get(
+                "house_no",
+                user_address.house_no
+            ),
+
+            "landmark": data.get(
+                "landmark",
+                user_address.landmark or ""
+            ),
+
+            "city": data.get(
+                "city",
+                user_address.city
+            ),
+
+            "state": data.get(
+                "state",
+                user_address.state
+            ),
+        }
+
+        serializer = BillingAddressSerializer(
+            user_address,
+            data=updated_address,
+            many=False
+        )
+
+        if serializer.is_valid():
+
+            serializer.save()
+
+            return Response(
+                serializer.data,
+                status=status.HTTP_200_OK
+            )
+
+        return Response(
+            {
+                "detail": "Address validation failed.",
+                "errors": serializer.errors
+            },
+            status=status.HTTP_400_BAD_REQUEST
+        )
 
 
-# delete address
+# =========================================================
+# DELETE BILLING ADDRESS
+# =========================================================
+
 class DeleteUserAddressView(APIView):
 
+    permission_classes = [
+        permissions.IsAuthenticated
+    ]
+
     def delete(self, request, pk):
-        
+
         try:
-            user_address = BillingAddress.objects.get(id=pk)
 
-            if request.user.id == user_address.user.id:
-                user_address.delete()
-                return Response({"details": "Address successfully deleted."}, status=status.HTTP_204_NO_CONTENT)
-            else:
-                return Response({"details": "Permission denied."}, status=status.HTTP_403_FORBIDDEN)
-        except:
-            return Response({"details": "Not found."}, status=status.HTTP_404_NOT_FOUND)
+            user_address = BillingAddress.objects.get(
+                id=pk,
+                user=request.user
+            )
+
+        except BillingAddress.DoesNotExist:
+
+            return Response(
+                {
+                    "detail": "Address not found."
+                },
+                status=status.HTTP_404_NOT_FOUND
+            )
+
+        user_address.delete()
+
+        return Response(
+            {
+                "detail": "Address successfully deleted."
+            },
+            status=status.HTTP_204_NO_CONTENT
+        )
 
 
-# all orders list
+# =========================================================
+# ALL ORDERS LIST
+# =========================================================
+
 class OrdersListView(APIView):
 
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [
+        permissions.IsAuthenticated
+    ]
 
     def get(self, request):
 
-        user_staff_status = request.user.is_staff
-        
-        if user_staff_status:
-            all_users_orders = OrderModel.objects.all()
-            serializer = AllOrdersListSerializer(all_users_orders, many=True)
-            return Response(serializer.data, status=status.HTTP_200_OK)
-        else:
-            all_orders = OrderModel.objects.filter(user=request.user)
-            serializer = AllOrdersListSerializer(all_orders, many=True)
-            return Response(serializer.data, status=status.HTTP_200_OK)
+        if request.user.is_staff:
 
-# change order delivered status
+            orders = OrderModel.objects.all()
+
+        else:
+
+            orders = OrderModel.objects.filter(
+                user=request.user
+            )
+
+        serializer = AllOrdersListSerializer(
+            orders,
+            many=True
+        )
+
+        return Response(
+            serializer.data,
+            status=status.HTTP_200_OK
+        )
+
+
+# =========================================================
+# CHANGE ORDER DELIVERY STATUS
+# =========================================================
+
 class ChangeOrderStatus(APIView):
 
-    permission_classes = [permissions.IsAdminUser]
+    permission_classes = [
+        permissions.IsAdminUser
+    ]
 
     def put(self, request, pk):
-        data = request.data       
-        order = OrderModel.objects.get(id=pk)
 
-        # only update this
-        order.is_delivered = data["is_delivered"]
-        order.delivered_at = data["delivered_at"]
+        try:
+
+            order = OrderModel.objects.get(
+                id=pk
+            )
+
+        except OrderModel.DoesNotExist:
+
+            return Response(
+                {
+                    "detail": "Order not found."
+                },
+                status=status.HTTP_404_NOT_FOUND
+            )
+
+        order.is_delivered = request.data.get(
+            "is_delivered",
+            order.is_delivered
+        )
+
+        order.delivered_at = request.data.get(
+            "delivered_at",
+            order.delivered_at
+        )
+
         order.save()
-        
-        
-        serializer = AllOrdersListSerializer(order, many=False)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+
+        serializer = AllOrdersListSerializer(
+            order,
+            many=False
+        )
+
+        return Response(
+            serializer.data,
+            status=status.HTTP_200_OK
+        )
