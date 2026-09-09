@@ -1,18 +1,34 @@
 # 🛍️ ShopEase – Full Stack E-Commerce Website
 
+<p align="center">
+  <img src="./screenshots/home.png" width="100%">
+</p>
+
+<p align="center">
+  <b>A Full Stack E-Commerce Website built with React.js and Django REST Framework.</b>
+</p>
+
+<p align="center">
+  <a href="https://shopease-frontend-hfod.onrender.com/">
+    🌐 Live Demo
+  </a>
+</p>
+
 A full-stack E-Commerce web application built using **React.js** for the frontend and **Django REST Framework** for the backend.
 
 ShopEase provides a complete online shopping workflow including product browsing, product search, user authentication, address management, checkout, payment processing, and order management.
 
 ---
 
-## 🌐 Live Demo
+# 🌐 Live Demo
 
 ### 🛒 Live Website
-https://shopease-frontend-hfod.onrender.com/
+
+🔗 https://shopease-frontend-hfod.onrender.com/
 
 ### 🔗 Backend API
-https://shopease-backend-5flz.onrender.com/
+
+🔗 https://shopease-backend-5flz.onrender.com/
 
 > **Note:** The backend is hosted on Render. If the backend has been inactive for some time, the first request may take a few seconds while the service starts.
 
@@ -22,10 +38,16 @@ https://shopease-backend-5flz.onrender.com/
 
 - [About the Project](#about-the-project)
 - [Features](#features)
+  - [User Features](#user-features)
+  - [Product Features](#product-features)
+  - [Address Features](#address-features)
+  - [Payment Features](#payment-features)
+  - [Order Features](#order-features)
+  - [Admin Features](#admin-features)
 - [Application Workflow](#application-workflow)
 - [Application Overview](#application-overview)
   - [Home Page](#home-page)
-  - [Product List](#product-list)
+  - [Product Listing](#product-listing)
   - [Product Details](#product-details)
   - [Search and Category](#search-and-category)
   - [User Registration](#user-registration)
@@ -65,16 +87,19 @@ The application allows users to:
 
 - Browse products
 - Search for products
+- Filter products by category
 - View product details
 - Create an account
 - Login securely
 - Manage their profile
+- Update account details
 - Add and manage delivery addresses
 - Proceed to checkout
 - Enter payment details
 - Complete the payment workflow
 - Create orders
 - View order history
+- Logout securely
 
 The application also provides admin functionality for managing products and monitoring customer orders.
 
@@ -125,7 +150,7 @@ The application also provides admin functionality for managing products and moni
 - Order Creation
 - Last Four Digits Handling
 
-> Payment functionality is configured for testing purposes. Do not use real card details.
+> **Note:** Payment functionality is configured in demo/test mode. Do not use real card details.
 
 ## 📦 Order Features
 
@@ -155,51 +180,51 @@ The application also provides admin functionality for managing products and moni
                     └───────┬───────┘
                             │
                             ▼
-                  ┌──────────────────┐
-                  │ Product Listing  │
-                  └────────┬─────────┘
-                           │
-                           ▼
-                  ┌──────────────────┐
-                  │ Product Details  │
-                  └────────┬─────────┘
-                           │
-                           ▼
+                 ┌──────────────────┐
+                 │ Product Listing  │
+                 └────────┬─────────┘
+                          │
+                          ▼
+                 ┌──────────────────┐
+                 │ Product Details  │
+                 └────────┬─────────┘
+                          │
+                          ▼
                     ┌────────────┐
                     │  Checkout  │
                     └─────┬──────┘
                           │
                           ▼
-                  ┌─────────────────┐
-                  │ Select Address  │
-                  └────────┬────────┘
-                           │
-                           ▼
-                  ┌─────────────────┐
-                  │ Card Details    │
-                  └────────┬────────┘
-                           │
-                           ▼
-                 ┌────────────────────┐
-                 │ Confirm Payment    │
-                 └──────────┬─────────┘
-                            │
-                            ▼
-                 ┌────────────────────┐
-                 │ Payment Processing │
-                 └──────────┬─────────┘
-                            │
-                            ▼
-                 ┌────────────────────┐
-                 │ Payment Successful │
-                 └──────────┬─────────┘
-                            │
-                            ▼
-                    ┌──────────────┐
-                    │ Order Created│
-                    └──────┬───────┘
-                           │
-                           ▼
-                    ┌──────────────┐
-                    │ My Orders    │
-                    └──────────────┘
+                 ┌─────────────────┐
+                 │ Select Address  │
+                 └────────┬────────┘
+                          │
+                          ▼
+                 ┌─────────────────┐
+                 │  Card Details   │
+                 └────────┬────────┘
+                          │
+                          ▼
+               ┌────────────────────┐
+               │  Confirm Payment   │
+               └──────────┬─────────┘
+                          │
+                          ▼
+               ┌────────────────────┐
+               │ Payment Processing │
+               └──────────┬─────────┘
+                          │
+                          ▼
+               ┌────────────────────┐
+               │ Payment Successful │
+               └──────────┬─────────┘
+                          │
+                          ▼
+                   ┌──────────────┐
+                   │ Order Created│
+                   └──────┬───────┘
+                          │
+                          ▼
+                   ┌──────────────┐
+                   │  My Orders   │
+                   └──────────────┘
